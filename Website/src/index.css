@@ -1,0 +1,6992 @@
+/* ==========================================================================
+   SELLBUY - PREMIUM CAR MARKETPLACE DESIGN SYSTEM
+   Modern Automotive Marketplace with Glassmorphism, Micro-Animations & Dual Modes
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap');
+
+:root {
+  /* Color Palette */
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --primary-glow: rgba(37, 99, 235, 0.35);
+  --primary-gradient: linear-gradient(135deg, #1d4ed8 0%, #2563eb 50%, #3b82f6 100%);
+  --accent-blue: #0284c7;
+  --accent-cyan: #06b6d4;
+  --accent-orange: #f97316;
+  --accent-green: #10b981;
+  --accent-red: #ef4444;
+
+  /* Neutrals & Dark Mode System */
+  --bg-dark: #0a0e17;
+  --bg-darker: #05080f;
+  --bg-card-dark: #111827;
+  --surface-dark: rgba(17, 24, 39, 0.75);
+  --border-dark: rgba(255, 255, 255, 0.08);
+
+  /* Mobile App Shell (Clean Light Theme as in Screenshot) */
+  --app-bg: #f8fafc;
+  --app-card-bg: #ffffff;
+  --app-text-main: #0f172a;
+  --app-text-muted: #64748b;
+  --app-border: #e2e8f0;
+  --app-primary: #1d4ed8;
+  --app-primary-light: #eff6ff;
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-heading: 'Outfit', var(--font-sans);
+
+  /* Shadows & Glass */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-glow: 0 0 25px rgba(37, 99, 235, 0.4);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 26px;
+  --radius-full: 9999px;
+
+  --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-dark);
+  color: #f1f5f9;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   TOP GLOBAL NAVIGATION BAR
+   ========================================================================== */
+.global-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(10, 14, 23, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-dark);
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.brand-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.brand-logo-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  object-fit: cover;
+  box-shadow: 0 0 15px rgba(37, 99, 235, 0.5);
+}
+
+.brand-info h1 {
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #ffffff 0%, #93c5fd 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.1;
+}
+
+.brand-badge {
+  font-size: 10px;
+  text-transform: uppercase;
+  background: rgba(37, 99, 235, 0.25);
+  color: #60a5fa;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid rgba(96, 165, 250, 0.3);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* View Switcher Tabs */
+.view-mode-tabs {
+  display: flex;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-full);
+  padding: 4px;
+  gap: 4px;
+}
+
+.mode-tab-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mode-tab-btn:hover {
+  color: #ffffff;
+}
+
+.mode-tab-btn.active {
+  background: var(--primary-gradient);
+  color: #ffffff;
+  box-shadow: 0 2px 10px rgba(37, 99, 235, 0.4);
+}
+
+/* Header Controls Right */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.lang-btn, .persona-select, .frame-toggle-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #f8fafc;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 7px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.lang-btn:hover, .persona-select:hover, .frame-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.persona-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 14px;
+  padding-right: 26px;
+}
+
+/* ==========================================================================
+   MAIN WORKSPACE & LAYOUT CONTAINER
+   ========================================================================== */
+.main-viewport {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 24px;
+  position: relative;
+  background: radial-gradient(circle at 50% 10%, rgba(37, 99, 235, 0.12) 0%, transparent 60%);
+}
+
+/* ==========================================================================
+   MOBILE DEVICE MOCKUP FRAME
+   Matches the design reference (iPhone 15 Pro aesthetic)
+   ========================================================================== */
+.device-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: var(--transition);
+}
+
+.device-frame {
+  width: 412px;
+  height: 860px;
+  background: #000000;
+  border-radius: 50px;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8),
+              0 0 0 10px #1e293b,
+              0 0 0 13px #0f172a,
+              0 0 35px rgba(37, 99, 235, 0.2);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: var(--transition);
+}
+
+/* When device frame is toggled off (Full Desktop App Mode) */
+.device-container.full-mode .device-frame {
+  width: 100%;
+  max-width: 900px;
+  height: 90vh;
+  border-radius: 20px;
+  box-shadow: var(--shadow-xl);
+}
+
+.device-notch {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 28px;
+  background: #000000;
+  border-radius: 20px;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+}
+
+.notch-camera {
+  width: 10px;
+  height: 10px;
+  background: #111827;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Phone Status Bar */
+.phone-status-bar {
+  height: 44px;
+  padding: 10px 24px 0 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--app-text-main);
+  background: var(--app-bg);
+  z-index: 50;
+  user-select: none;
+}
+
+.phone-status-bar.dark-status {
+  background: #0f172a;
+  color: #ffffff;
+}
+
+.status-time {
+  font-weight: 700;
+  letter-spacing: -0.2px;
+}
+
+.status-icons {
+  display: flex;
+  gap: 6px;
+  font-size: 12px;
+}
+
+/* App Screen Content Canvas */
+.phone-screen-canvas {
+  flex: 1;
+  background: var(--app-bg);
+  color: var(--app-text-main);
+  overflow-y: auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  scrollbar-width: none;
+}
+.phone-screen-canvas::-webkit-scrollbar {
+  display: none;
+}
+
+/* Phone Home Bar */
+.phone-home-indicator {
+  height: 24px;
+  background: var(--app-bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+}
+.home-bar-pill {
+  width: 130px;
+  height: 4px;
+  background: #94a3b8;
+  border-radius: 2px;
+}
+
+/* ==========================================================================
+   APP SCREENS (1 to 20)
+   ========================================================================== */
+.screen-view {
+  display: none;
+  flex-direction: column;
+  flex: 1;
+  min-height: 100%;
+  position: relative;
+  animation: fadeIn 0.25s ease-out;
+}
+.screen-view.active-screen {
+  display: flex;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --------------------------------------------------------------------------
+   SCREEN 1: SPLASH SCREEN
+   -------------------------------------------------------------------------- */
+.splash-screen {
+  background: #080d1a;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 24px;
+  height: 100%;
+}
+.splash-logo-wrap {
+  position: relative;
+  margin-bottom: 24px;
+}
+.splash-logo-img {
+  width: 110px;
+  height: 110px;
+  border-radius: 26px;
+  box-shadow: 0 0 40px rgba(37, 99, 235, 0.6);
+  animation: pulseLogo 2s infinite ease-in-out;
+}
+@keyframes pulseLogo {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 40px rgba(37, 99, 235, 0.6); }
+  50% { transform: scale(1.04); box-shadow: 0 0 60px rgba(37, 99, 235, 0.85); }
+}
+.splash-title {
+  font-family: var(--font-heading);
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+}
+.splash-sub {
+  color: #94a3b8;
+  font-size: 14px;
+  max-width: 260px;
+  line-height: 1.4;
+}
+.splash-loader {
+  margin-top: 48px;
+  display: flex;
+  gap: 8px;
+}
+.loader-dot {
+  width: 10px;
+  height: 10px;
+  background: #3b82f6;
+  border-radius: 50%;
+  animation: bounceDot 1.2s infinite ease-in-out both;
+}
+.loader-dot:nth-child(1) { animation-delay: -0.32s; }
+.loader-dot:nth-child(2) { animation-delay: -0.16s; }
+@keyframes bounceDot {
+  0%, 80%, 100% { transform: scale(0); opacity: 0.3; }
+  40% { transform: scale(1); opacity: 1; }
+}
+
+/* --------------------------------------------------------------------------
+   SCREEN 2: WELCOME / ONBOARDING
+   -------------------------------------------------------------------------- */
+.welcome-screen {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  background: #ffffff;
+}
+.welcome-top {
+  display: flex;
+  justify-content: flex-end;
+}
+.welcome-hero {
+  text-align: center;
+  margin: auto 0;
+}
+.welcome-car-img {
+  width: 100%;
+  max-height: 220px;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-lg);
+}
+.welcome-tagline {
+  display: inline-block;
+  background: var(--app-primary-light);
+  color: var(--app-primary);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  margin-bottom: 12px;
+}
+.welcome-title {
+  font-family: var(--font-heading);
+  font-size: 24px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+.welcome-desc {
+  font-size: 14px;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+/* Primary UI Buttons */
+.btn-primary {
+  background: var(--app-primary);
+  color: #ffffff;
+  border: none;
+  font-weight: 600;
+  font-size: 15px;
+  padding: 14px 20px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  width: 100%;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(29, 78, 216, 0.3);
+}
+.btn-primary:hover {
+  background: #1e40af;
+  transform: translateY(-1px);
+}
+.btn-secondary {
+  background: #ffffff;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 12px 18px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-secondary:hover {
+  background: #f1f5f9;
+}
+.btn-text {
+  background: transparent;
+  border: none;
+  color: #64748b;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+/* --------------------------------------------------------------------------
+   SCREEN 3: LOGIN / SIGNUP
+   -------------------------------------------------------------------------- */
+.auth-screen {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  background: #ffffff;
+}
+.auth-header {
+  margin-top: 16px;
+  margin-bottom: 28px;
+}
+.auth-header h2 {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+.auth-header p {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+.input-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 8px;
+}
+.phone-input-wrap {
+  display: flex;
+  align-items: center;
+  border: 1.5px solid #cbd5e1;
+  border-radius: var(--radius-md);
+  padding: 0 14px;
+  background: #ffffff;
+  transition: var(--transition);
+}
+.phone-input-wrap:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+.country-code {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-right: 12px;
+  border-right: 1px solid #e2e8f0;
+}
+.text-input {
+  width: 100%;
+  border: none;
+  padding: 13px 12px;
+  font-size: 15px;
+  outline: none;
+  color: #0f172a;
+  background: transparent;
+  font-family: inherit;
+}
+.boxed-input {
+  border: 1.5px solid #cbd5e1;
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  background: #ffffff;
+}
+.boxed-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.social-auth-divider {
+  display: flex;
+  align-items: center;
+  margin: 24px 0 16px 0;
+  color: #94a3b8;
+  font-size: 12px;
+}
+.social-auth-divider::before, .social-auth-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #e2e8f0;
+}
+.social-auth-divider span {
+  padding: 0 12px;
+}
+
+.social-btns {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.social-btn {
+  flex: 1;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  padding: 11px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.social-btn:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+}
+
+/* --------------------------------------------------------------------------
+   SCREEN 4: OTP VERIFICATION
+   -------------------------------------------------------------------------- */
+.otp-boxes {
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+  margin: 24px 0;
+}
+.otp-input {
+  width: 48px;
+  height: 52px;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+  border: 1.5px solid #cbd5e1;
+  border-radius: var(--radius-md);
+  background: #ffffff;
+  outline: none;
+  transition: var(--transition);
+}
+.otp-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+.resend-timer-wrap {
+  text-align: center;
+  font-size: 13px;
+  color: #64748b;
+  margin-bottom: 24px;
+}
+.resend-link {
+  color: var(--primary);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* --------------------------------------------------------------------------
+   SCREEN 6: LOCATION SETUP
+   -------------------------------------------------------------------------- */
+.location-hero {
+  text-align: center;
+  margin: auto 0;
+  padding: 24px 0;
+}
+.location-pin-icon {
+  width: 90px;
+  height: 90px;
+  background: #eff6ff;
+  color: var(--primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  margin: 0 auto 24px auto;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.15);
+}
+
+/* --------------------------------------------------------------------------
+   SCREEN 7: CITY SELECTOR DRAWER
+   -------------------------------------------------------------------------- */
+.city-search-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f1f5f9;
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  margin: 16px 0;
+}
+.city-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 480px;
+  overflow-y: auto;
+}
+.city-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition);
+  color: #1e293b;
+  font-weight: 500;
+  font-size: 14px;
+}
+.city-item:hover, .city-item.active {
+  background: #eff6ff;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   SCREEN 8: HOME SCREEN & DASHBOARD
+   -------------------------------------------------------------------------- */
+.home-header {
+  padding: 14px 18px 8px 18px;
+  background: #ffffff;
+  border-bottom: 1px solid #f1f5f9;
+}
+.location-bar-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.user-location-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f172a;
+  cursor: pointer;
+}
+.notif-bell-btn {
+  position: relative;
+  background: #f1f5f9;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #334155;
+  font-size: 16px;
+}
+.notif-badge-pill {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 8px;
+  height: 8px;
+  background: var(--accent-red);
+  border-radius: 50%;
+  border: 1.5px solid #ffffff;
+}
+
+/* Quick Search Header */
+.home-search-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f1f5f9;
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  cursor: pointer;
+}
+.home-search-input input {
+  border: none;
+  background: transparent;
+  width: 100%;
+  font-size: 13px;
+  outline: none;
+  color: #0f172a;
+}
+
+/* Promo Banner */
+.home-promo-banner {
+  margin: 14px 18px;
+  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #2563eb 100%);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 20px rgba(30, 58, 138, 0.25);
+}
+.promo-content {
+  position: relative;
+  z-index: 2;
+  max-width: 60%;
+}
+.promo-badge {
+  font-size: 10px;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+  display: inline-block;
+  margin-bottom: 6px;
+}
+.promo-title {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 6px;
+}
+.promo-car-bg {
+  position: absolute;
+  right: -25px;
+  bottom: -15px;
+  width: 170px;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 12px;
+  opacity: 0.9;
+  transform: rotate(-4deg);
+}
+
+/* Quick Categories */
+.quick-categories-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  padding: 0 18px;
+  margin-bottom: 18px;
+}
+.category-card-item {
+  background: #ffffff;
+  border: 1px solid #f1f5f9;
+  border-radius: var(--radius-md);
+  padding: 12px 6px;
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.category-card-item:hover {
+  transform: translateY(-2px);
+  border-color: var(--primary);
+  box-shadow: var(--shadow-sm);
+}
+.category-icon-box {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+.cat-blue { background: #eff6ff; color: #2563eb; }
+.cat-green { background: #ecfdf5; color: #10b981; }
+.cat-purple { background: #f5f3ff; color: #8b5cf6; }
+.cat-amber { background: #fffbeb; color: #f59e0b; }
+.category-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #334155;
+}
+
+/* Popular Brands */
+.section-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 18px;
+  margin-bottom: 10px;
+}
+.section-header-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #0f172a;
+}
+.section-view-all {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--primary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.brands-horizontal-scroll {
+  display: flex;
+  gap: 10px;
+  padding: 0 18px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  margin-bottom: 20px;
+}
+.brands-horizontal-scroll::-webkit-scrollbar { display: none; }
+.brand-pill-item {
+  flex-shrink: 0;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-full);
+  padding: 7px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+  transition: var(--transition);
+}
+.brand-pill-item:hover, .brand-pill-item.active {
+  background: var(--app-primary-light);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* Featured Cars List */
+.cars-cards-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 0 18px 24px 18px;
+}
+.car-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+}
+.car-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: #cbd5e1;
+}
+.car-card-img-wrap {
+  position: relative;
+  height: 180px;
+  width: 100%;
+  overflow: hidden;
+  background: #e2e8f0;
+}
+.car-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+.car-card:hover .car-card-img {
+  transform: scale(1.03);
+}
+.car-fav-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 34px;
+  height: 34px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: #64748b;
+  transition: var(--transition);
+}
+.car-fav-btn.favorited {
+  color: #ef4444;
+}
+.car-certified-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(16, 185, 129, 0.95);
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  text-transform: uppercase;
+}
+.car-card-body {
+  padding: 14px;
+}
+.car-card-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.car-card-price {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--primary);
+  margin-bottom: 8px;
+}
+.car-specs-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 12px;
+  color: #64748b;
+}
+.spec-chip {
+  background: #f1f5f9;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* --------------------------------------------------------------------------
+   BOTTOM NAVIGATION BAR
+   (Home, Search, Sell, Saved, Profile)
+   -------------------------------------------------------------------------- */
+.bottom-nav-bar {
+  height: 60px;
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 8px;
+  z-index: 60;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.03);
+}
+.bottom-nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #94a3b8;
+  font-size: 10px;
+  font-weight: 600;
+  transition: var(--transition);
+}
+.bottom-nav-item.active {
+  color: var(--primary);
+}
+.bottom-nav-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+.sell-nav-highlight {
+  position: relative;
+  top: -10px;
+}
+.sell-nav-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--primary-gradient);
+  color: #ffffff !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+}
+
+/* --------------------------------------------------------------------------
+   SIDE DRAWER MENU (SCREEN 9)
+   -------------------------------------------------------------------------- */
+.drawer-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(3px);
+  z-index: 200;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.drawer-backdrop.open {
+  display: block;
+  opacity: 1;
+}
+.side-drawer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 82%;
+  max-width: 320px;
+  background: #ffffff;
+  z-index: 210;
+  transform: translateX(-100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+.drawer-backdrop.open .side-drawer {
+  transform: translateX(0);
+}
+.drawer-user-card {
+  padding: 30px 20px 20px 20px;
+  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.drawer-avatar {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  object-fit: cover;
+}
+.drawer-user-info h3 {
+  font-size: 16px;
+  font-weight: 700;
+}
+.drawer-user-info p {
+  font-size: 12px;
+  color: #93c5fd;
+}
+.drawer-menu-list {
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.drawer-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  color: #334155;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+  transition: var(--transition);
+}
+.drawer-item:hover {
+  background: #f1f5f9;
+  color: var(--primary);
+}
+.drawer-item-icon {
+  font-size: 18px;
+  width: 24px;
+  text-align: center;
+}
+.drawer-logout-item {
+  margin-top: auto;
+  border-top: 1px solid #f1f5f9;
+  color: #ef4444 !important;
+}
+
+/* --------------------------------------------------------------------------
+   SCREEN 10 & 11: SEARCH & FILTER SCREEN
+   -------------------------------------------------------------------------- */
+.search-filter-pills {
+  display: flex;
+  gap: 8px;
+  padding: 10px 18px;
+  background: #ffffff;
+  border-bottom: 1px solid #f1f5f9;
+}
+.filter-tab-pill {
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #475569;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: var(--transition);
+}
+.filter-tab-pill.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #ffffff;
+}
+
+/* Filter Modal */
+.modal-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 150;
+  display: none;
+  align-items: flex-end;
+}
+.modal-overlay.open {
+  display: flex;
+}
+.modal-bottom-sheet {
+  background: #ffffff;
+  width: 100%;
+  max-height: 85%;
+  border-radius: 24px 24px 0 0;
+  padding: 20px;
+  overflow-y: auto;
+  animation: slideUp 0.25s ease-out;
+}
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+.modal-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e2e8f0;
+}
+.pill-selector-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.pill-btn {
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+  color: #334155;
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.pill-btn.selected {
+  background: var(--app-primary-light);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* --------------------------------------------------------------------------
+   SCREEN 13 & 14 & 15: CAR DETAILS & ACTIONS
+   -------------------------------------------------------------------------- */
+.car-details-top-nav {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  display: flex;
+  justify-content: space-between;
+  z-index: 20;
+}
+.icon-circle-btn {
+  width: 36px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: #1e293b;
+}
+.car-details-gallery-hero {
+  position: relative;
+  height: 240px;
+  background: #0f172a;
+}
+.details-hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.photo-counter-badge {
+  position: absolute;
+  bottom: 12px;
+  right: 14px;
+  background: rgba(0, 0, 0, 0.65);
+  color: #ffffff;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.car-details-body {
+  padding: 18px;
+  background: #ffffff;
+}
+.details-price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-top: 4px;
+  margin-bottom: 16px;
+}
+.details-price-tag {
+  font-family: var(--font-heading);
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--primary);
+}
+.specs-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  background: #f8fafc;
+  border-radius: var(--radius-md);
+  padding: 14px;
+  margin-bottom: 18px;
+}
+.spec-grid-item {
+  text-align: center;
+}
+.spec-grid-item .label {
+  font-size: 11px;
+  color: #64748b;
+  margin-bottom: 2px;
+}
+.spec-grid-item .val {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/* Seller Card */
+.seller-summary-card {
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-md);
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.seller-left-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.seller-avatar-img {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.seller-name-txt {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f172a;
+}
+.seller-meta-txt {
+  font-size: 11px;
+  color: #64748b;
+}
+
+/* Sticky Bottom Action Buttons (Chat & Call) */
+.car-bottom-cta-bar {
+  display: flex;
+  gap: 10px;
+  padding: 12px 18px;
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+}
+.btn-chat-seller {
+  flex: 1;
+  background: #eff6ff;
+  color: var(--primary);
+  border: 1.5px solid var(--primary);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  font-weight: 700;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+}
+.btn-call-seller {
+  flex: 1;
+  background: var(--primary);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 12px;
+  font-weight: 700;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+/* --------------------------------------------------------------------------
+   SCREEN 16, 26: SELL CAR MULTI-STEP FLOW
+   -------------------------------------------------------------------------- */
+.sell-flow-step-bar {
+  display: flex;
+  padding: 14px 18px;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  gap: 8px;
+}
+.step-dot {
+  flex: 1;
+  height: 4px;
+  background: #e2e8f0;
+  border-radius: 2px;
+}
+.step-dot.active {
+  background: var(--primary);
+}
+.photo-upload-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 18px 0;
+}
+.photo-upload-slot {
+  aspect-ratio: 1;
+  border: 2px dashed #cbd5e1;
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  background: #f8fafc;
+  font-size: 12px;
+  color: #64748b;
+  position: relative;
+  overflow: hidden;
+}
+.photo-preview-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.remove-thumb-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 20px;
+  height: 20px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #ffffff;
+  border: none;
+  border-radius: 50%;
+  font-size: 10px;
+  cursor: pointer;
+}
+
+/* --------------------------------------------------------------------------
+   SCREEN 18: BUYER/SELLER CHAT SCREEN
+   -------------------------------------------------------------------------- */
+.chat-screen-header {
+  padding: 12px 16px;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.chat-seller-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.chat-car-banner {
+  padding: 8px 16px;
+  background: #f1f5f9;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid #e2e8f0;
+}
+.chat-car-thumb {
+  width: 44px;
+  height: 34px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+.chat-thread-container {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #f8fafc;
+}
+.chat-bubble {
+  max-width: 80%;
+  padding: 10px 14px;
+  border-radius: 16px;
+  font-size: 13.5px;
+  line-height: 1.4;
+  position: relative;
+}
+.chat-bubble.buyer {
+  align-self: flex-end;
+  background: var(--primary);
+  color: #ffffff;
+  border-bottom-right-radius: 4px;
+}
+.chat-bubble.seller {
+  align-self: flex-start;
+  background: #ffffff;
+  color: #0f172a;
+  border: 1px solid #e2e8f0;
+  border-bottom-left-radius: 4px;
+}
+.bubble-img-attachment {
+  width: 100%;
+  max-width: 200px;
+  border-radius: 10px;
+  margin-top: 6px;
+}
+.bubble-timestamp {
+  font-size: 10px;
+  margin-top: 4px;
+  opacity: 0.75;
+  text-align: right;
+}
+.chat-input-bar {
+  padding: 10px 14px;
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.chat-input-text {
+  flex: 1;
+  background: #f1f5f9;
+  border: none;
+  padding: 10px 14px;
+  border-radius: var(--radius-full);
+  outline: none;
+  font-size: 13.5px;
+}
+.chat-send-btn {
+  width: 38px;
+  height: 38px;
+  background: var(--primary);
+  color: #ffffff;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   ADMIN PANEL VIEW
+   ========================================================================== */
+.admin-view-container {
+  width: 100%;
+  max-width: 1200px;
+  background: #111827;
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-lg);
+  display: flex;
+  min-height: 820px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+.admin-sidebar {
+  width: 240px;
+  background: #0b0f19;
+  border-right: 1px solid var(--border-dark);
+  padding: 20px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.admin-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  border-radius: var(--radius-sm);
+  color: #94a3b8;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  width: 100%;
+  text-align: left;
+  transition: var(--transition);
+}
+.admin-nav-item:hover, .admin-nav-item.active {
+  background: rgba(37, 99, 235, 0.2);
+  color: #60a5fa;
+  border-left: 3px solid #3b82f6;
+}
+.admin-main-content {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+  background: #111827;
+  color: #f1f5f9;
+}
+.kpi-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.kpi-card {
+  background: #1e293b;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  padding: 18px;
+}
+.kpi-label {
+  font-size: 12px;
+  color: #94a3b8;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.kpi-value {
+  font-family: var(--font-heading);
+  font-size: 24px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+/* Admin Table */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 14px;
+  font-size: 13px;
+}
+.admin-table th {
+  background: #1e293b;
+  color: #94a3b8;
+  font-weight: 600;
+  text-align: left;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.admin-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: #e2e8f0;
+}
+.admin-table tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+.status-pill {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+.status-active { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+.status-pending { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+.status-sold { background: rgba(148, 163, 184, 0.2); color: #94a3b8; }
+.status-rejected { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+
+/* ==========================================================================
+   SCREEN SYSTEM / GALLERY VIEW (20+ SCREENS MATRIX)
+   Matches the design map in Image 2
+   ========================================================================== */
+.screen-system-view {
+  width: 100%;
+  max-width: 1380px;
+}
+.screen-matrix-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+.screen-matrix-header h2 {
+  font-family: var(--font-heading);
+  font-size: 26px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+.module-group-section {
+  margin-bottom: 32px;
+}
+.module-title-bar {
+  background: rgba(37, 99, 235, 0.25);
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  border-radius: var(--radius-sm);
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #93c5fd;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.screen-thumbnails-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+.screen-card-preview {
+  background: #111827;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: center;
+}
+.screen-card-preview:hover {
+  transform: translateY(-4px);
+  border-color: #3b82f6;
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+}
+.screen-preview-box {
+  height: 280px;
+  background: #f8fafc;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 10px;
+  border: 1px solid #334155;
+  display: flex;
+  flex-direction: column;
+}
+.screen-card-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #f1f5f9;
+}
+.screen-card-desc {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+/* ==========================================================================
+   LIVE LOGS STREAM TERMINAL
+   ========================================================================== */
+.logs-terminal-view {
+  width: 100%;
+  max-width: 1100px;
+  background: #030712;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  height: 800px;
+  box-shadow: var(--shadow-xl);
+  font-family: 'Consolas', 'Courier New', monospace;
+}
+.logs-top-bar {
+  background: #0f172a;
+  padding: 12px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.log-filters-row {
+  display: flex;
+  gap: 8px;
+}
+.log-filter-btn {
+  background: #1e293b;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.log-filter-btn.active {
+  background: var(--primary);
+  color: #ffffff;
+}
+.logs-terminal-body {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.log-entry-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  padding-bottom: 4px;
+}
+.log-time { color: #64748b; flex-shrink: 0; }
+.log-tag { font-weight: 700; flex-shrink: 0; }
+.log-tag.INFO { color: #38bdf8; }
+.log-tag.WARN { color: #fbbf24; }
+.log-tag.ERROR { color: #f87171; }
+.log-tag.AUTH { color: #a78bfa; }
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .global-header {
+    flex-wrap: wrap;
+    padding: 10px 14px;
+  }
+  .view-mode-tabs {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+  }
+  .main-viewport {
+    padding: 8px;
+  }
+  .device-frame {
+    width: 100%;
+    height: 94vh;
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
+
+/* ==========================================================================
+   SELLBUY FULL ANDROID MOBILE PARITY & ADVANCED MARKETPLACE STYLES
+   ========================================================================== */
+
+/* App Pro Badge */
+.app-badge-pro {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #ffffff;
+  font-size: 9px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+/* Navbar Elements */
+.web-menu-drawer-btn {
+  background: #f1f5f9;
+  border: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  color: #0f172a;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+.web-menu-drawer-btn:hover {
+  background: #e2e8f0;
+  color: var(--primary);
+}
+
+.city-selector-btn {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 8px 14px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #1e293b;
+  transition: var(--transition);
+}
+.city-selector-btn:hover {
+  border-color: #3b82f6;
+  background: #eff6ff;
+}
+
+.web-filter-trigger-btn {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  padding: 7px 14px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #334155;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.web-filter-trigger-btn:hover {
+  background: #e2e8f0;
+  color: var(--primary);
+}
+
+.nav-icon-action-btn {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  transition: var(--transition);
+}
+.nav-icon-action-btn:hover {
+  background: #f1f5f9;
+  transform: translateY(-2px);
+}
+
+.nav-badge-bubble {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 800;
+  width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #ffffff;
+}
+.nav-badge-bubble.blue { background: #2563eb; }
+.nav-badge-bubble.orange { background: #f59e0b; }
+
+.device-mode-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #0f172a;
+  color: #f8fafc;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.device-mode-toggle-btn:hover {
+  background: #1e293b;
+  transform: translateY(-1px);
+}
+.device-mode-toggle-btn.active {
+  background: linear-gradient(135deg, #10b981, #059669);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+}
+
+.btn-sell-primary {
+  background: var(--primary-gradient);
+  color: #ffffff;
+  border: none;
+  padding: 9px 18px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px var(--primary-glow);
+  transition: var(--transition);
+}
+.btn-sell-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px var(--primary-glow);
+}
+
+.user-profile-nav-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 4px 10px 4px 4px;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.user-profile-nav-chip:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+.nav-avatar-img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.nav-user-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f172a;
+}
+.btn-signin-nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: var(--primary);
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-signin-nav:hover {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+/* Cars Grid Top Bar */
+.cars-grid-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.cars-count-badge {
+  background: #eff6ff;
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+.web-tab-pills-row {
+  display: flex;
+  gap: 6px;
+  background: #f1f5f9;
+  padding: 4px;
+  border-radius: 14px;
+}
+.sort-dropdown-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+.sort-select-input {
+  border: none;
+  background: transparent;
+  font-size: 12px;
+  font-weight: 700;
+  color: #0f172a;
+  cursor: pointer;
+  outline: none;
+}
+.btn-filter-icon {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 8px 14px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e293b;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-filter-icon:hover {
+  background: #e2e8f0;
+}
+
+/* Enhanced Car Card Details */
+.car-card-brand-badge {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.car-card-year-tag {
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+  background: #f1f5f9;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.car-tag-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(8px);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+.car-fav-btn.active {
+  background: #fee2e2;
+  color: #ef4444;
+}
+.car-card-footer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid #f1f5f9;
+}
+.car-card-seller-avatar {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.car-card-seller-name {
+  font-size: 11px;
+  color: #475569;
+  font-weight: 600;
+}
+.btn-card-view-details {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+.btn-card-view-details:hover {
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   DRAWER MENU STYLES (Screen 09)
+   ========================================================================== */
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+  display: flex;
+  justify-content: flex-start;
+  animation: fadeIn 0.2s ease-out;
+}
+.drawer-content {
+  width: 340px;
+  max-width: 85vw;
+  background: #ffffff;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 10px 0 30px rgba(0, 0, 0, 0.25);
+  animation: slideInLeft 0.25s ease-out;
+}
+@keyframes slideInLeft {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+.drawer-header {
+  padding: 24px 20px 16px 20px;
+  border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.drawer-user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  flex: 1;
+}
+.drawer-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--primary);
+}
+.drawer-user-name {
+  font-size: 16px;
+  font-weight: 800;
+  color: #0f172a;
+}
+.drawer-user-phone {
+  font-size: 12px;
+  color: #64748b;
+}
+.drawer-badge-status {
+  font-size: 10px;
+  font-weight: 700;
+  color: #16a34a;
+  background: #f0fdf4;
+  padding: 1px 6px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-top: 2px;
+}
+.drawer-guest-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  flex: 1;
+}
+.drawer-guest-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #eff6ff;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+.drawer-close-btn {
+  background: #f1f5f9;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.drawer-city-row {
+  margin: 12px 18px;
+  padding: 10px 14px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+.drawer-menu-items {
+  flex: 1;
+  padding: 10px 14px;
+  overflow-y: auto;
+}
+.drawer-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+  background: transparent;
+  color: #1e293b;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: var(--transition);
+}
+.drawer-item:hover {
+  background: #f8fafc;
+}
+.drawer-icon-wrap {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+}
+.drawer-item-label {
+  flex: 1;
+  text-align: left;
+}
+.drawer-tag-new {
+  background: #dbeafe;
+  color: var(--primary);
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+.drawer-count-badge {
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+.drawer-count-badge.red { background: #fee2e2; color: #dc2626; }
+.drawer-count-badge.blue { background: #e0f2fe; color: #0284c7; }
+.drawer-count-badge.orange { background: #fef3c7; color: #d97706; }
+.drawer-footer {
+  padding: 16px 20px;
+  border-top: 1px solid #f1f5f9;
+}
+.drawer-logout-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #fee2e2;
+  background: #fef2f2;
+  color: #dc2626;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   MOBILE BOTTOM NAVIGATION BAR
+   ========================================================================== */
+.mobile-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 64px;
+  z-index: 990;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.05);
+}
+@media (min-width: 992px) {
+  .website-root:not(.mobile-simulator-active) .mobile-bottom-nav {
+    display: none;
+  }
+}
+.bottom-nav-item {
+  background: none;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: #64748b;
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  flex: 1;
+}
+.bottom-nav-item i {
+  font-size: 18px;
+}
+.bottom-nav-item.active {
+  color: var(--primary);
+}
+.bottom-nav-item-sell {
+  background: none;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  margin-top: -16px;
+}
+.bottom-nav-sell-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+  background: var(--primary-gradient);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  box-shadow: 0 4px 12px var(--primary-glow);
+}
+.bottom-nav-item-sell span {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-top: 2px;
+}
+.bottom-nav-badge {
+  position: absolute;
+  top: -4px;
+  right: -8px;
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 9px;
+  font-weight: 800;
+  width: 15px;
+  height: 15px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.bottom-nav-badge.blue { background: #2563eb; }
+
+/* ==========================================================================
+   CAR DETAIL MODAL (Screen 13)
+   ========================================================================== */
+.car-detail-modal-card {
+  background: #ffffff;
+  max-width: 1050px;
+  width: 100%;
+  border-radius: 24px;
+  padding: 28px;
+  position: relative;
+  max-height: 92vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-xl);
+  animation: modalScale 0.2s ease-out;
+}
+@keyframes modalScale {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+.car-modal-top-actions {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+  z-index: 10;
+}
+.car-modal-fav-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+.car-modal-fav-btn.active {
+  color: #ef4444;
+  background: #fee2e2;
+  border-color: #fca5a5;
+}
+.car-modal-close-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0f172a;
+  font-size: 16px;
+  cursor: pointer;
+}
+.car-detail-layout-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 28px;
+}
+@media (max-width: 860px) {
+  .car-detail-layout-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.car-main-img-wrap {
+  width: 100%;
+  height: 340px;
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #0f172a;
+  cursor: zoom-in;
+}
+.car-main-display-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.gallery-arrow-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(4px);
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+.gallery-arrow-btn.prev { left: 12px; }
+.gallery-arrow-btn.next { right: 12px; }
+.gallery-arrow-btn:hover { background: rgba(15, 23, 42, 0.95); }
+
+.gallery-overlay-badges {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  display: flex;
+  gap: 6px;
+}
+.certified-badge-pill {
+  background: #16a34a;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+.verified-badge-pill {
+  background: rgba(15, 23, 42, 0.8);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+.gallery-counter-pill {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.gallery-thumb-strip {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+.gallery-thumb-item {
+  width: 72px;
+  height: 52px;
+  border-radius: 8px;
+  object-fit: cover;
+  cursor: pointer;
+  border: 2px solid transparent;
+  flex-shrink: 0;
+  transition: var(--transition);
+}
+.gallery-thumb-item.active {
+  border-color: var(--primary);
+  transform: scale(1.05);
+}
+.inspection-guarantee-card {
+  margin-top: 16px;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 14px;
+  padding: 14px;
+}
+.inspection-checkmarks-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  font-size: 11px;
+  color: #166534;
+  font-weight: 600;
+}
+.car-brand-tag {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.car-detail-title {
+  font-size: 24px;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 4px 0 0 0;
+  line-height: 1.2;
+}
+.car-price-hero-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 14px 18px;
+  margin: 14px 0;
+}
+.car-price-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+}
+.car-price-amount {
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--primary);
+}
+.car-emi-estimate-chip {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  padding: 6px 12px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #1e293b;
+  font-size: 12px;
+}
+.car-desc-paragraph {
+  font-size: 13px;
+  color: #475569;
+  line-height: 1.6;
+}
+.in-modal-emi-box {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+}
+.emi-tenure-slider {
+  width: 100%;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+.car-contact-buttons-row {
+  display: flex;
+  gap: 8px;
+}
+.btn-chat-seller-primary {
+  flex: 2;
+  background: var(--primary-gradient);
+  color: #ffffff;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 14px;
+  font-weight: 800;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 14px var(--primary-glow);
+}
+.btn-call-seller-secondary {
+  flex: 1;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  color: #0f172a;
+  padding: 12px 14px;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 13px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.btn-whatsapp-seller {
+  flex: 1;
+  background: #22c55e;
+  color: #ffffff;
+  border: none;
+  padding: 12px 14px;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 13px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* ==========================================================================
+   IMAGE GALLERY LIGHTBOX (Screen 14)
+   ========================================================================== */
+.gallery-lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+}
+.gallery-lightbox-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.gallery-lightbox-close {
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  color: #ffffff;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+}
+.gallery-lightbox-stage {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 20px;
+}
+.gallery-stage-image {
+  max-width: 90vw;
+  max-height: 75vh;
+  object-fit: contain;
+  border-radius: 10px;
+}
+.gallery-stage-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: #ffffff;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.gallery-stage-btn.prev { left: 24px; }
+.gallery-stage-btn.next { right: 24px; }
+.gallery-lightbox-thumbs {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  padding: 14px;
+  background: rgba(0, 0, 0, 0.6);
+  overflow-x: auto;
+}
+.gallery-lightbox-thumb {
+  width: 70px;
+  height: 48px;
+  border-radius: 6px;
+  object-fit: cover;
+  cursor: pointer;
+  opacity: 0.6;
+  border: 2px solid transparent;
+}
+.gallery-lightbox-thumb.active {
+  opacity: 1;
+  border-color: #3b82f6;
+  transform: scale(1.08);
+}
+
+/* ==========================================================================
+   SELL CAR WIZARD (Screens 16-20)
+   ========================================================================== */
+.sell-wizard-modal-card {
+  background: #ffffff;
+  max-width: 650px;
+  width: 100%;
+  border-radius: 24px;
+  padding: 28px;
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-xl);
+}
+.sell-wizard-header {
+  margin-bottom: 20px;
+}
+.wizard-step-label {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.wizard-main-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 4px 0 12px 0;
+}
+.wizard-progress-bar-wrap {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+.wizard-progress-segment {
+  height: 4px;
+  border-radius: 2px;
+  background: #e2e8f0;
+  transition: var(--transition);
+}
+.wizard-progress-segment.active {
+  background: var(--primary);
+}
+.sell-start-hero-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 30px 20px;
+  text-align: center;
+}
+.sell-benefit-cards-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 18px;
+}
+.sell-benefit-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 14px 10px;
+  text-align: center;
+}
+.wizard-photos-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.wizard-photo-slot {
+  position: relative;
+  height: 110px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #cbd5e1;
+}
+.wizard-photo-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.wizard-cover-tag {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  background: rgba(15, 23, 42, 0.85);
+  color: #ffffff;
+  font-size: 9px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.wizard-photo-del-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: rgba(239, 68, 68, 0.85);
+  color: #ffffff;
+  border: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  font-size: 11px;
+  cursor: pointer;
+}
+.wizard-photo-add-slot {
+  height: 110px;
+  border: 2px dashed #94a3b8;
+  border-radius: 12px;
+  background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.wizard-photo-add-slot:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: #eff6ff;
+}
+.wizard-nav-buttons-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #f1f5f9;
+}
+.wizard-preview-car-card {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  margin-top: 10px;
+}
+.wizard-preview-img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+/* ==========================================================================
+   CHAT MODAL WINDOW (Screen 24)
+   ========================================================================== */
+.chat-modal-window {
+  background: #ffffff;
+  max-width: 900px;
+  width: 100%;
+  height: 82vh;
+  border-radius: 24px;
+  overflow: hidden;
+  display: flex;
+  box-shadow: var(--shadow-xl);
+}
+.chat-sidebar-threads {
+  width: 290px;
+  border-right: 1px solid #e2e8f0;
+  background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+}
+@media (max-width: 700px) {
+  .chat-sidebar-threads { display: none; }
+}
+.chat-sidebar-header {
+  padding: 18px 16px;
+  border-bottom: 1px solid #e2e8f0;
+}
+.chat-threads-list {
+  flex: 1;
+  overflow-y: auto;
+}
+.chat-thread-item {
+  display: flex;
+  gap: 10px;
+  padding: 12px 14px;
+  border-bottom: 1px solid #f1f5f9;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.chat-thread-item:hover, .chat-thread-item.active {
+  background: #eff6ff;
+}
+.chat-thread-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.chat-thread-name {
+  font-size: 13px;
+  font-weight: 800;
+  color: #0f172a;
+}
+.chat-thread-car-tag {
+  font-size: 11px;
+  color: var(--primary);
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.chat-thread-preview {
+  font-size: 11px;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.chat-main-stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+}
+.chat-active-header {
+  padding: 14px 18px;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.chat-header-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.chat-online-indicator {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #16a34a;
+  border: 2px solid #ffffff;
+}
+.chat-call-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #eff6ff;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+.chat-car-banner {
+  background: #f1f5f9;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  border-bottom: 1px solid #e2e8f0;
+}
+.chat-car-banner-thumb {
+  width: 42px;
+  height: 32px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+.chat-messages-container {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.chat-bubble-row {
+  display: flex;
+  gap: 8px;
+  max-width: 75%;
+}
+.chat-bubble-row.me {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+.chat-bubble-row.seller {
+  align-self: flex-start;
+}
+.chat-bubble-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.chat-bubble {
+  padding: 10px 14px;
+  border-radius: 16px;
+  font-size: 13px;
+  line-height: 1.4;
+  position: relative;
+}
+.chat-bubble.me {
+  background: var(--primary-gradient);
+  color: #ffffff;
+  border-bottom-right-radius: 4px;
+}
+.chat-bubble.seller {
+  background: #f1f5f9;
+  color: #1e293b;
+  border-bottom-left-radius: 4px;
+}
+.chat-bubble-time {
+  font-size: 9px;
+  opacity: 0.7;
+  display: block;
+  margin-top: 4px;
+  text-align: right;
+}
+.chat-quick-replies-row {
+  display: flex;
+  gap: 6px;
+  padding: 6px 14px;
+  overflow-x: auto;
+  background: #f8fafc;
+  border-top: 1px solid #f1f5f9;
+}
+.chat-quick-chip {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  padding: 5px 10px;
+  border-radius: 14px;
+  font-size: 11px;
+  color: #334155;
+  white-space: nowrap;
+  cursor: pointer;
+  font-weight: 600;
+}
+.chat-quick-chip:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+.chat-input-bar {
+  display: flex;
+  padding: 10px 14px;
+  border-top: 1px solid #e2e8f0;
+  gap: 8px;
+  align-items: center;
+}
+.chat-text-input {
+  flex: 1;
+  border: 1px solid #cbd5e1;
+  border-radius: 20px;
+  padding: 10px 16px;
+  font-size: 13px;
+  outline: none;
+}
+.chat-send-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--primary-gradient);
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ==========================================================================
+   OTHER MODALS (City, Filter, Auth, My Listings, Profile, Notifications)
+   ========================================================================== */
+.modal-compact-card {
+  background: #ffffff;
+  max-width: 520px;
+  width: 100%;
+  border-radius: 24px;
+  padding: 24px;
+  position: relative;
+  max-height: 88vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-xl);
+}
+.manage-modal-card {
+  background: #ffffff;
+  max-width: 850px;
+  width: 100%;
+  border-radius: 24px;
+  padding: 28px;
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-xl);
+}
+.auth-modal-card {
+  background: #ffffff;
+  max-width: 420px;
+  width: 100%;
+  border-radius: 24px;
+  padding: 28px;
+  position: relative;
+  box-shadow: var(--shadow-xl);
+}
+.modal-close-x-btn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: #f1f5f9;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #64748b;
+  font-size: 14px;
+}
+.auth-brand-badge {
+  width: 54px;
+  height: 54px;
+  border-radius: 27px;
+  background: #eff6ff;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  margin: 0 auto 12px auto;
+}
+.auth-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 6px 0;
+}
+.auth-subtitle {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
+}
+.phone-input-wrap {
+  display: flex;
+  align-items: center;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #ffffff;
+}
+.phone-prefix {
+  padding: 12px 14px;
+  background: #f8fafc;
+  border-right: 1px solid #cbd5e1;
+  font-weight: 700;
+  font-size: 14px;
+  color: #334155;
+}
+.phone-input-field {
+  flex: 1;
+  border: none;
+  padding: 12px 14px;
+  font-size: 16px;
+  font-weight: 700;
+  outline: none;
+  letter-spacing: 1px;
+}
+.otp-input-field {
+  width: 100%;
+  padding: 14px;
+  border: 2px solid var(--primary);
+  border-radius: 12px;
+  font-size: 24px;
+  font-weight: 900;
+  text-align: center;
+  letter-spacing: 12px;
+  outline: none;
+}
+.auth-demo-hint {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 12px;
+  color: #1e40af;
+  margin: 14px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.auth-submit-btn {
+  width: 100%;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 800;
+}
+.auth-back-btn {
+  background: none;
+  border: none;
+  color: #64748b;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.avatar-pick-thumb {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: var(--transition);
+}
+.avatar-pick-thumb.active {
+  border-color: var(--primary);
+  transform: scale(1.1);
+}
+
+/* City Selector Modal */
+.city-modal-card {
+  background: #ffffff;
+  max-width: 580px;
+  width: 100%;
+  border-radius: 24px;
+  padding: 26px;
+  position: relative;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-xl);
+}
+.city-search-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 14px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+}
+.city-search-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 14px;
+  color: #0f172a;
+}
+.city-search-clear {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+}
+.city-gps-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid #bfdbfe;
+  background: #eff6ff;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.city-gps-btn:hover {
+  background: #dbeafe;
+}
+.gps-icon-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #2563eb;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.city-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.city-pill-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.city-pill-card:hover, .city-pill-card.active {
+  background: #eff6ff;
+  border-color: var(--primary);
+}
+.city-pill-name {
+  font-size: 14px;
+  font-weight: 800;
+  color: #0f172a;
+}
+.city-pill-sub {
+  font-size: 11px;
+  color: #64748b;
+}
+
+/* Advanced Filter Modal */
+.filter-modal-card {
+  background: #ffffff;
+  max-width: 580px;
+  width: 100%;
+  border-radius: 24px;
+  padding: 26px;
+  position: relative;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+}
+.filter-scrollable-body {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+.filter-section {
+  margin-bottom: 20px;
+}
+.filter-section-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: #1e293b;
+  margin-bottom: 8px;
+  display: block;
+}
+.filter-chips-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.filter-chip {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #334155;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.filter-chip:hover {
+  background: #e2e8f0;
+}
+.filter-chip.active {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+}
+.filter-chip-sm {
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+}
+.filter-chip-sm:hover {
+  background: #e2e8f0;
+}
+
+/* My Listings & Saved Cars */
+.my-listings-scroll-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+.my-listing-item-card {
+  display: flex;
+  gap: 16px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 14px;
+}
+.my-listing-img {
+  width: 140px;
+  height: 95px;
+  border-radius: 10px;
+  object-fit: cover;
+  cursor: pointer;
+}
+.my-listing-info {
+  flex: 1;
+}
+.my-listing-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  cursor: pointer;
+}
+.my-listing-price {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--primary);
+  margin-top: 2px;
+}
+.listing-status-badge {
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+.listing-status-badge.active { background: #dcfce7; color: #166534; }
+.listing-status-badge.pending { background: #fef3c7; color: #92400e; }
+.listing-status-badge.sold { background: #fee2e2; color: #991b1b; }
+.my-listing-actions-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
+}
+.btn-action-small {
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-action-small.edit {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: var(--primary);
+}
+.btn-action-small.delete {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+}
+.saved-cars-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+@media (max-width: 600px) {
+  .saved-cars-grid { grid-template-columns: 1fr; }
+}
+.saved-car-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.saved-car-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+.saved-car-card-img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+}
+.saved-car-unfav-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Notifications Modal */
+.notif-filter-pill {
+  background: #f1f5f9;
+  border: none;
+  padding: 5px 12px;
+  border-radius: 14px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #475569;
+  cursor: pointer;
+}
+.notif-filter-pill.active {
+  background: #0f172a;
+  color: #ffffff;
+}
+.notif-mark-all-btn {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.notif-scroll-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 55vh;
+  overflow-y: auto;
+}
+.notif-item-card {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  cursor: pointer;
+  position: relative;
+  transition: var(--transition);
+}
+.notif-item-card.unread {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+}
+.notif-icon-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  background: #e2e8f0;
+  color: #334155;
+}
+.notif-icon-circle.messages { background: #dbeafe; color: #2563eb; }
+.notif-icon-circle.listings { background: #dcfce7; color: #16a34a; }
+.notif-icon-circle.price_alert { background: #fee2e2; color: #dc2626; }
+.notif-item-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: #0f172a;
+}
+.notif-item-time {
+  font-size: 11px;
+  color: #94a3b8;
+}
+.notif-item-desc {
+  font-size: 12px;
+  color: #475569;
+  margin-top: 2px;
+}
+.notif-unread-dot {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #2563eb;
+}
+
+/* Profile Modal */
+.profile-hero-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 18px;
+  margin-bottom: 16px;
+}
+.profile-hero-avatar {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--primary);
+}
+.profile-edit-trigger-btn {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #475569;
+  cursor: pointer;
+}
+.profile-stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid #e2e8f0;
+  text-align: center;
+}
+.stat-number {
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--primary);
+}
+.stat-label {
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 600;
+}
+.profile-edit-subform {
+  background: #f1f5f9;
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 14px;
+}
+.profile-shortcuts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.profile-shortcut-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid #f1f5f9;
+  background: #ffffff;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.profile-shortcut-item:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+.shortcut-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+.shortcut-label {
+  flex: 1;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e293b;
+}
+.btn-logout-full {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #fee2e2;
+  background: #fef2f2;
+  color: #dc2626;
+  font-weight: 800;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+/* Seller Profile Modal */
+.seller-modal-card {
+  background: #ffffff;
+  max-width: 800px;
+  width: 100%;
+  border-radius: 24px;
+  padding: 28px;
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-xl);
+}
+.seller-profile-banner {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 20px;
+}
+.seller-profile-header-info {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+.seller-profile-avatar {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--primary);
+}
+.seller-verified-tag {
+  background: #dcfce7;
+  color: #166534;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 20px;
+}
+.seller-cars-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+}
+.seller-car-mini-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.seller-car-mini-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: #3b82f6;
+}
+.seller-car-mini-img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+}
+
+/* ==========================================================================
+   ANDROID SMARTPHONE SIMULATOR FRAME
+   ========================================================================== */
+.android-frame-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px 80px 16px;
+  background: #090d16;
+  min-height: 100vh;
+}
+.android-frame-control-strip {
+  width: 100%;
+  max-width: 440px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.android-frame-exit-btn {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.android-frame-exit-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+.android-phone-chassis {
+  width: 412px;
+  max-width: 95vw;
+  height: 870px;
+  max-height: 90vh;
+  background: #ffffff;
+  border-radius: 44px;
+  box-shadow: 0 0 0 12px #1e293b, 0 25px 60px rgba(0, 0, 0, 0.7);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.android-punch-hole {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 12px;
+  background: #000000;
+  border-radius: 50%;
+  z-index: 1000;
+}
+.android-status-bar {
+  height: 34px;
+  background: #0f172a;
+  color: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  font-size: 11px;
+  font-weight: 700;
+  z-index: 999;
+}
+.android-icons-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.android-app-bar {
+  height: 52px;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  z-index: 998;
+}
+.android-menu-icon {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #0f172a;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.android-city-btn {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 4px 10px;
+  border-radius: 14px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+.android-notif-btn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #64748b;
+  position: relative;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.android-badge-dot {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ef4444;
+}
+.android-screen-viewport {
+  flex: 1;
+  overflow-y: auto;
+  position: relative;
+  padding-bottom: 70px;
+}
+
+/* Feedback Toast Banner */
+.feedback-toast-banner {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #0f172a;
+  color: #ffffff;
+  padding: 12px 22px;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+  font-size: 13px;
+  font-weight: 700;
+  z-index: 10001;
+  animation: slideUpFade 0.25s ease-out;
+}
+.feedback-toast-banner i {
+  color: #10b981;
+  font-size: 16px;
+}
+@keyframes slideUpFade {
+  from { opacity: 0; transform: translate(-50%, 15px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+@media (max-width: 640px) {
+  .hide-on-xs { display: none !important; }
+}
+@media (max-width: 900px) {
+  .hide-on-sm { display: none !important; }
+}
+
+/* ==========================================================================
+   SELLBUY - MODERN OLX / CARS24 MARKETPLACE STYLES
+   Authentic Indian Classifieds Design System with Live Search, Left Filters & Cards
+   ========================================================================== */
+
+.website-root {
+  background-color: #f8fafc;
+  color: #0f172a;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-sans);
+}
+
+.desktop-main-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --------------------------------------------------------------------------
+   1. GLOBAL OLX HEADER & TOP NAVIGATION
+   -------------------------------------------------------------------------- */
+.olx-header-wrapper {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: #ffffff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  width: 100%;
+}
+
+.olx-main-nav {
+  border-bottom: 1px solid #e2e8f0;
+  background: #ffffff;
+}
+
+.olx-nav-container {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Drawer Toggle */
+.olx-drawer-toggle-btn {
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  font-size: 16px;
+  color: #0f172a;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.olx-drawer-toggle-btn:hover {
+  background: #e2e8f0;
+  color: #2563eb;
+}
+
+/* Logo */
+.olx-brand-logo-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+.olx-logo-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  object-fit: cover;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
+}
+.olx-brand-title {
+  font-family: var(--font-heading);
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  color: #002f34;
+  line-height: 1;
+}
+.olx-brand-tag {
+  font-size: 10px;
+  font-weight: 800;
+  background: #ffce32;
+  color: #002f34;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 6px;
+  letter-spacing: 0.5px;
+}
+
+/* Location Selector Box (OLX style) */
+.olx-location-box {
+  border: 2px solid #002f34;
+  border-radius: 6px;
+  height: 46px;
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  background: #ffffff;
+  min-width: 170px;
+  max-width: 220px;
+  transition: all 0.2s;
+}
+.olx-location-box:hover {
+  border-color: #2563eb;
+  background: #f8fafc;
+}
+.olx-loc-icon {
+  color: #002f34;
+  font-size: 16px;
+}
+.olx-loc-text {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+.olx-loc-arrow {
+  font-size: 11px;
+  color: #64748b;
+}
+
+/* Wide Central Search Box (OLX style) */
+.olx-search-box {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  border: 2px solid #002f34;
+  border-radius: 6px;
+  height: 46px;
+  background: #ffffff;
+  position: relative;
+  transition: border-color 0.2s;
+}
+.olx-search-box:focus-within {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+.olx-search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 0 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #0f172a;
+  background: transparent;
+}
+.olx-search-input::placeholder {
+  color: #94a3b8;
+}
+.olx-search-clear {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+}
+.olx-search-clear:hover {
+  color: #0f172a;
+}
+.olx-search-submit-btn {
+  width: 48px;
+  height: 100%;
+  background: #002f34;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  transition: background 0.2s;
+}
+.olx-search-submit-btn:hover {
+  background: #2563eb;
+}
+
+/* Right Nav Controls */
+.olx-right-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.olx-lang-btn {
+  background: none;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 800;
+  color: #0f172a;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.olx-lang-btn:hover {
+  border-color: #002f34;
+}
+
+.olx-nav-icon-btn {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.olx-nav-icon-btn:hover {
+  background: #f1f5f9;
+  transform: translateY(-1px);
+}
+.olx-badge-count {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 800;
+  border-radius: 10px;
+  padding: 1px 6px;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.olx-badge-count.blue { background: #2563eb; }
+.olx-badge-count.orange { background: #f59e0b; }
+
+.olx-sim-mode-btn {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #2563eb;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.olx-sim-mode-btn:hover {
+  background: #2563eb;
+  color: #ffffff;
+}
+.olx-sim-mode-btn.active {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.olx-user-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px 4px 4px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.olx-user-chip:hover {
+  background: #f1f5f9;
+}
+.olx-user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.olx-user-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.olx-login-btn {
+  background: none;
+  border: none;
+  color: #002f34;
+  font-size: 14px;
+  font-weight: 800;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 6px 10px;
+}
+.olx-login-btn:hover {
+  color: #2563eb;
+}
+
+/* The Iconic Multi-Color OLX + SELL Button */
+.olx-sell-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 46px;
+  padding: 0 22px;
+  border-radius: 24px;
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  color: #002f34;
+  background: #ffffff;
+  border: 4px solid;
+  border-color: #23e5db #ffce32 #3a77ff #ffce32;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.olx-sell-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+  border-color: #ffce32 #23e5db #ffce32 #3a77ff;
+}
+.olx-sell-button i {
+  font-size: 13px;
+  font-weight: 900;
+}
+
+/* --------------------------------------------------------------------------
+   SECONDARY SUB-NAV STRIP
+   -------------------------------------------------------------------------- */
+.olx-sub-nav {
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+}
+.olx-sub-nav-container {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 42px;
+}
+.olx-sub-nav-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.olx-all-cats-btn {
+  background: none;
+  border: none;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  color: #002f34;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+.olx-brand-links-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.olx-brand-link-btn {
+  background: none;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  padding: 4px 0;
+  transition: color 0.15s;
+}
+.olx-brand-link-btn:hover {
+  color: #002f34;
+}
+.olx-brand-link-btn.active {
+  color: #2563eb;
+  font-weight: 800;
+  border-bottom: 2px solid #2563eb;
+}
+.olx-sub-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.olx-quick-pill {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 4px 12px;
+  border-radius: 14px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #334155;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.olx-quick-pill:hover,
+.olx-quick-pill.active {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #1d4ed8;
+}
+
+/* --------------------------------------------------------------------------
+   2. HERO BANNER & QUICK ACTIONS
+   -------------------------------------------------------------------------- */
+.olx-hero-section {
+  background: linear-gradient(180deg, #f1f5f9 0%, #ffffff 100%);
+  padding: 24px 0 16px 0;
+}
+.olx-hero-container {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+.olx-hero-main-card {
+  background: linear-gradient(135deg, #091322 0%, #1e293b 100%);
+  border-radius: 16px;
+  padding: 36px 44px;
+  display: grid;
+  grid-template-columns: 1.25fr 0.75fr;
+  align-items: center;
+  gap: 30px;
+  color: #ffffff;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+.olx-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(37, 99, 235, 0.25);
+  border: 1px solid rgba(96, 165, 250, 0.3);
+  color: #93c5fd;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 5px 12px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+}
+.olx-hero-headline {
+  font-family: var(--font-heading);
+  font-size: 36px;
+  font-weight: 900;
+  line-height: 1.2;
+  margin: 14px 0 10px 0;
+  letter-spacing: -0.5px;
+}
+.olx-hero-subtext {
+  font-size: 14px;
+  color: #94a3b8;
+  line-height: 1.6;
+  max-width: 520px;
+  margin-bottom: 24px;
+}
+.olx-hero-cta-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.olx-hero-primary-btn {
+  background: #2563eb;
+  color: #ffffff;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 800;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+  transition: all 0.2s;
+}
+.olx-hero-primary-btn:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+}
+.olx-hero-secondary-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 800;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+.olx-hero-secondary-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+.olx-hero-img-col {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.olx-hero-car-img {
+  width: 100%;
+  max-height: 250px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+}
+.olx-hero-trust-bubble {
+  position: absolute;
+  bottom: -10px;
+  left: -10px;
+  background: #ffffff;
+  color: #0f172a;
+  padding: 10px 16px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* Quick Action 4 Cards Strip */
+.olx-quick-action-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+.olx-action-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+.olx-action-card:hover {
+  transform: translateY(-2px);
+  border-color: #cbd5e1;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+}
+.olx-action-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+.olx-action-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: #0f172a;
+}
+.olx-action-desc {
+  font-size: 11px;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   3. OLX 2-COLUMN MARKETPLACE LAYOUT (STICKY SIDEBAR + ADS GRID)
+   -------------------------------------------------------------------------- */
+.olx-marketplace-section {
+  background: #f8fafc;
+  padding: 24px 0 60px 0;
+  min-height: 80vh;
+}
+.olx-marketplace-container {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+.olx-grid-with-sidebar {
+  display: grid;
+  grid-template-columns: 290px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+/* Persistent Sticky Left Sidebar */
+.olx-filter-sidebar {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  position: sticky;
+  top: 105px;
+  max-height: calc(100vh - 120px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+.olx-filter-sidebar-header {
+  padding: 16px 18px;
+  border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+}
+.olx-clear-filters-btn {
+  background: none;
+  border: none;
+  color: #2563eb;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.olx-clear-filters-btn:hover {
+  text-decoration: underline;
+}
+.olx-sidebar-close-mobile {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #64748b;
+  cursor: pointer;
+}
+.olx-sidebar-scroll-body {
+  padding: 16px 18px;
+  overflow-y: auto;
+  flex: 1;
+}
+.olx-sidebar-block {
+  padding-bottom: 18px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid #f1f5f9;
+}
+.olx-block-title {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: #475569;
+  display: block;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+.olx-loc-sidebar-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+.olx-loc-sidebar-card:hover {
+  border-color: #2563eb;
+}
+.olx-field-sublabel {
+  font-size: 11px;
+  font-weight: 600;
+  color: #64748b;
+  display: block;
+  margin-bottom: 4px;
+}
+.olx-sidebar-input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f172a;
+  background: #ffffff;
+  outline: none;
+}
+.olx-sidebar-input:focus {
+  border-color: #2563eb;
+}
+.olx-quick-budget-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+.olx-budget-tag {
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.olx-budget-tag:hover,
+.olx-budget-tag.active {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #ffffff;
+}
+.olx-brand-checkbox-list {
+  max-height: 200px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-right: 4px;
+}
+.olx-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #1e293b;
+}
+.olx-checkbox-label {
+  flex: 1;
+  font-weight: 500;
+}
+.olx-item-count {
+  font-size: 11px;
+  color: #94a3b8;
+}
+.olx-pill-chips-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.olx-chip-button {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.olx-chip-button:hover,
+.olx-chip-button.active {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #ffffff;
+}
+
+/* Right Catalog Main */
+.olx-catalog-main {
+  min-width: 0;
+}
+.olx-catalog-top-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.olx-breadcrumb-nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #64748b;
+}
+.olx-catalog-title {
+  font-family: var(--font-heading);
+  font-size: 24px;
+  font-weight: 900;
+  color: #0f172a;
+  letter-spacing: -0.3px;
+}
+.olx-results-counter {
+  font-size: 14px;
+  color: #64748b;
+  font-weight: 500;
+}
+.olx-sort-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.olx-sort-label {
+  font-size: 12px;
+  font-weight: 800;
+  color: #475569;
+  letter-spacing: 0.5px;
+}
+.olx-sort-select {
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f172a;
+  cursor: pointer;
+  outline: none;
+}
+.olx-sort-select:focus {
+  border-color: #2563eb;
+}
+
+/* Active Filter Tag Pills */
+.olx-active-filter-tags {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding: 10px 14px;
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+.olx-active-tag {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1d4ed8;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.olx-active-tag i {
+  cursor: pointer;
+  color: #60a5fa;
+  font-size: 11px;
+}
+.olx-active-tag i:hover {
+  color: #ef4444;
+}
+.olx-reset-all-link {
+  background: none;
+  border: none;
+  color: #ef4444;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: underline;
+  margin-left: 6px;
+}
+
+/* Loading & Empty States */
+.olx-loading-state,
+.olx-no-results-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 60px 24px;
+  text-align: center;
+}
+.olx-loading-state i {
+  font-size: 32px;
+  color: #2563eb;
+  margin-bottom: 16px;
+}
+.olx-loading-state p {
+  color: #64748b;
+  font-weight: 600;
+}
+
+/* OLX ADS CARDS GRID */
+.olx-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(265px, 1fr));
+  gap: 18px;
+}
+
+/* OLX Individual Car Card */
+.olx-car-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+.olx-car-card:hover {
+  transform: translateY(-4px);
+  border-color: #cbd5e1;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.olx-card-img-wrap {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  background: #f1f5f9;
+  overflow: hidden;
+}
+.olx-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+.olx-car-card:hover .olx-card-img {
+  transform: scale(1.04);
+}
+
+/* Ribbon Badges (CERTIFIED / FEATURED) */
+.olx-card-ribbon {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 10px;
+  font-weight: 900;
+  padding: 3px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+  z-index: 2;
+}
+.olx-card-ribbon.certified {
+  background: #16a34a;
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.olx-card-ribbon.featured {
+  background: #ffce32;
+  color: #002f34;
+}
+
+/* Wishlist Heart Button */
+.olx-card-heart-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  color: #475569;
+  cursor: pointer;
+  z-index: 2;
+  transition: all 0.2s;
+}
+.olx-card-heart-btn:hover {
+  background: #ffffff;
+  transform: scale(1.1);
+}
+.olx-card-heart-btn.active {
+  color: #ef4444;
+}
+
+/* Card Body */
+.olx-card-body {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.olx-card-price {
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 900;
+  color: #0f172a;
+  letter-spacing: -0.3px;
+  margin-bottom: 4px;
+}
+.olx-card-specs-line {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.olx-card-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+  line-height: 1.4;
+  margin-bottom: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.olx-card-footer {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 600;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 8px;
+}
+.olx-card-location {
+  display: flex;
+  align-items: center;
+  text-transform: uppercase;
+}
+.olx-card-time {
+  font-size: 10px;
+}
+
+/* Hover Quick Actions Strip */
+.olx-card-actions-hover {
+  display: none;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed #e2e8f0;
+}
+.olx-car-card:hover .olx-card-actions-hover {
+  display: flex;
+}
+.olx-quick-chat-btn {
+  flex: 1;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1d4ed8;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  transition: all 0.15s;
+}
+.olx-quick-chat-btn:hover {
+  background: #2563eb;
+  color: #ffffff;
+}
+.olx-quick-view-btn {
+  flex: 1.2;
+  background: #002f34;
+  color: #ffffff;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.olx-quick-view-btn:hover {
+  background: #2563eb;
+}
+
+/* --------------------------------------------------------------------------
+   4. TRUST PILLARS & SELL PROMOTIONAL BANNER
+   -------------------------------------------------------------------------- */
+.olx-trust-wrapper {
+  background: #ffffff;
+  padding: 56px 0;
+  border-top: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+}
+.olx-trust-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 40px;
+}
+.olx-trust-item {
+  background: #f8fafc;
+  border: 1px solid #f1f5f9;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  transition: transform 0.2s;
+}
+.olx-trust-item:hover {
+  transform: translateY(-3px);
+}
+.olx-trust-icon-box {
+  width: 54px;
+  height: 54px;
+  border-radius: 14px;
+  margin: 0 auto 16px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+.olx-trust-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+.olx-trust-desc {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+/* Sell Car Promotional Banner */
+.olx-sell-car-promo-banner {
+  background: linear-gradient(135deg, #002f34 0%, #004d55 100%);
+  border-radius: 16px;
+  padding: 36px 44px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+  color: #ffffff;
+}
+.olx-sell-tag {
+  background: #ffce32;
+  color: #002f34;
+  font-size: 11px;
+  font-weight: 900;
+  padding: 4px 10px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+.olx-sell-headline {
+  font-family: var(--font-heading);
+  font-size: 28px;
+  font-weight: 900;
+  margin: 10px 0;
+  letter-spacing: -0.3px;
+}
+.olx-sell-sub {
+  font-size: 14px;
+  color: #cbd5e1;
+  max-width: 540px;
+  line-height: 1.5;
+}
+.olx-sell-cta-btn {
+  background: #ffce32;
+  color: #002f34;
+  font-weight: 900;
+  font-size: 15px;
+  padding: 12px 28px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+}
+.olx-sell-cta-btn:hover {
+  background: #ffd95c;
+  transform: translateY(-2px);
+}
+.olx-sell-promo-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.promo-badge-card {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.promo-badge-card strong {
+  display: block;
+  font-size: 14px;
+  color: #ffffff;
+}
+.promo-badge-card span {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+/* --------------------------------------------------------------------------
+   5. OLX DIRECTORY FOOTER
+   -------------------------------------------------------------------------- */
+.olx-footer-wrapper {
+  background: #ebeeef;
+  color: #002f34;
+  margin-top: auto;
+}
+.olx-footer-directory-strip {
+  padding: 44px 0;
+  border-bottom: 1px solid #d8dede;
+}
+.olx-directory-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+}
+.olx-dir-title {
+  font-size: 13px;
+  font-weight: 900;
+  color: #002f34;
+  letter-spacing: 0.5px;
+  margin-bottom: 16px;
+}
+.olx-dir-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.olx-dir-list a {
+  color: #475569;
+  font-size: 12px;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.olx-dir-list a:hover {
+  color: #002f34;
+  text-decoration: underline;
+}
+.olx-app-store-badge {
+  background: #002f34;
+  color: #ffffff;
+  padding: 8px 14px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.olx-app-store-badge:hover {
+  background: #2563eb;
+}
+.olx-footer-bottom-bar {
+  background: #002f34;
+  color: #ffffff;
+  padding: 22px 0;
+}
+
+/* --------------------------------------------------------------------------
+   6. GLOBAL MODALS (FOR 26 MOBILE/WEB SCREEN FEATURES)
+   -------------------------------------------------------------------------- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(6px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: fadeIn 0.2s ease-out;
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-close-x-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: #f1f5f9;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 16px;
+  color: #475569;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  z-index: 10;
+}
+.modal-close-x-btn:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+/* Car Detail Modal Card */
+.car-detail-modal-card {
+  background: #ffffff;
+  color: #0f172a;
+  border-radius: 16px;
+  max-width: 960px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  animation: modalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes modalPop {
+  from { opacity: 0; transform: scale(0.96) translateY(10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.car-modal-top-actions {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  gap: 10px;
+  z-index: 20;
+}
+.car-modal-fav-btn,
+.car-modal-close-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
+  border: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  cursor: pointer;
+  color: #475569;
+  transition: all 0.2s;
+}
+.car-modal-fav-btn.active {
+  color: #ef4444;
+}
+.car-modal-close-btn:hover,
+.car-modal-fav-btn:hover {
+  background: #ffffff;
+  transform: scale(1.08);
+}
+
+.car-detail-layout-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  padding: 24px;
+}
+
+.car-main-img-wrap {
+  width: 100%;
+  height: 320px;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  background: #f1f5f9;
+  cursor: pointer;
+}
+.car-main-display-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.car-img-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.85);
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+}
+.car-img-nav-btn.prev { left: 10px; }
+.car-img-nav-btn.next { right: 10px; }
+
+.car-thumbnails-strip {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  overflow-x: auto;
+}
+.car-thumb-item {
+  width: 60px;
+  height: 44px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+.car-thumb-item.active {
+  border-color: #2563eb;
+}
+
+.car-detail-badge-pill {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1d4ed8;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.car-detail-title {
+  font-family: var(--font-heading);
+  font-size: 24px;
+  font-weight: 900;
+  margin: 8px 0 4px 0;
+  color: #0f172a;
+}
+.car-detail-location-sub {
+  font-size: 13px;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+.car-detail-price-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+.car-price-main {
+  font-family: var(--font-heading);
+  font-size: 28px;
+  font-weight: 900;
+  color: #0f172a;
+}
+.car-specs-chips-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.car-spec-chip {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px;
+}
+.car-spec-chip span {
+  display: block;
+  font-size: 11px;
+  color: #64748b;
+}
+.car-spec-chip strong {
+  font-size: 13px;
+  color: #0f172a;
+}
+
+.car-action-buttons-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+.car-btn-chat {
+  flex: 1;
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.car-btn-call {
+  flex: 1;
+  background: #16a34a;
+  color: #ffffff;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* Sell Car Wizard Modal Card */
+.sell-wizard-modal-card {
+  background: #ffffff;
+  color: #0f172a;
+  border-radius: 16px;
+  max-width: 640px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  animation: modalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.wizard-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.wizard-steps-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.step-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #e2e8f0;
+}
+.step-dot.active {
+  background: #2563eb;
+  width: 22px;
+  border-radius: 10px;
+}
+.wizard-body {
+  padding: 24px;
+}
+.wizard-footer {
+  padding: 16px 24px;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Auth Modal Card */
+.auth-modal-card {
+  background: #ffffff;
+  color: #0f172a;
+  border-radius: 16px;
+  max-width: 440px;
+  width: 100%;
+  padding: 32px 28px;
+  position: relative;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  animation: modalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.auth-brand-badge {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: #eff6ff;
+  color: #2563eb;
+  font-size: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px auto;
+}
+.auth-title {
+  font-family: var(--font-heading);
+  font-size: 22px;
+  font-weight: 900;
+  margin-bottom: 6px;
+  color: #0f172a;
+}
+.auth-subtitle {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.4;
+}
+.phone-input-wrap {
+  display: flex;
+  align-items: center;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+  height: 48px;
+  margin-top: 8px;
+}
+.phone-input-wrap:focus-within {
+  border-color: #2563eb;
+}
+.phone-prefix {
+  background: #f8fafc;
+  padding: 0 12px;
+  font-weight: 700;
+  font-size: 14px;
+  color: #334155;
+  border-right: 1px solid #e2e8f0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+.phone-input-field {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 0 14px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/* Chat, Notifications, Profile, City, Filter Modals */
+.chat-modal-card,
+.notif-modal-card,
+.profile-modal-card,
+.city-modal-card,
+.filter-modal-card,
+.my-listings-modal-card,
+.saved-cars-modal-card {
+  background: #ffffff;
+  color: #0f172a;
+  border-radius: 16px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  animation: modalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.chat-modal-card {
+  max-width: 800px;
+}
+
+/* --------------------------------------------------------------------------
+   7. RESPONSIVE BREAKPOINTS (DESKTOP, TABLET, MOBILE)
+   -------------------------------------------------------------------------- */
+@media (max-width: 1100px) {
+  .olx-grid-with-sidebar {
+    grid-template-columns: 240px 1fr;
+    gap: 18px;
+  }
+  .olx-hero-headline {
+    font-size: 28px;
+  }
+  .olx-trust-grid,
+  .olx-directory-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 991px) {
+  .hide-on-desktop {
+    display: flex !important;
+  }
+  .hide-on-tablet {
+    display: none !important;
+  }
+  .olx-grid-with-sidebar {
+    grid-template-columns: 1fr;
+  }
+  .olx-filter-sidebar {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10000;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+  .olx-filter-sidebar.mobile-open {
+    display: flex !important;
+  }
+  .olx-mobile-filter-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+  }
+  .olx-mobile-filter-trigger {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+  .olx-mobile-sort-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .olx-mobile-sort-select {
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .olx-hero-main-card {
+    grid-template-columns: 1fr;
+  }
+  .olx-hero-img-col {
+    display: none;
+  }
+  .olx-quick-action-strip {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .car-detail-layout-grid {
+    grid-template-columns: 1fr;
+  }
+  .olx-sell-car-promo-banner {
+    flex-direction: column;
+    text-align: center;
+  }
+  .olx-sell-promo-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+@media (min-width: 992px) {
+  .hide-on-desktop {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .olx-location-box {
+    display: none;
+  }
+  .olx-cards-grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  }
+  .olx-trust-grid,
+  .olx-directory-grid {
+    grid-template-columns: 1fr;
+  }
+  .olx-quick-action-strip {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 540px) {
+  .olx-quick-action-strip {
+    grid-template-columns: 1fr;
+  }
+  .olx-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
+   SELLBUY - REAL-TIME VEHICLE CHAT MODAL (OLX / WHATSAPP STYLE)
+   ========================================================================== */
+
+/* Main Chat Modal Container */
+.chat-modal-window {
+  width: 980px;
+  max-width: 96vw;
+  height: 720px;
+  max-height: 90vh;
+  background: #ffffff;
+  border-radius: 16px;
+  display: flex;
+  overflow: hidden;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.35);
+  border: 1px solid #e2e8f0;
+  position: relative;
+  animation: modalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* --------------------------------------------------------------------------
+   LEFT COLUMN: CONVERSATION THREADS HUB
+   -------------------------------------------------------------------------- */
+.chat-sidebar-threads {
+  width: 340px;
+  background: #ffffff;
+  border-right: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  height: 100%;
+}
+
+.chat-sidebar-header {
+  padding: 16px;
+  border-bottom: 1px solid #f1f5f9;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.chat-sidebar-title {
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0;
+}
+
+.chat-count-pill {
+  background: #eff6ff;
+  color: #2563eb;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 12px;
+  border: 1px solid #bfdbfe;
+}
+
+.chat-close-btn-mobile {
+  background: #f1f5f9;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #475569;
+  cursor: pointer;
+}
+
+/* Search input inside conversations list */
+.chat-search-input-wrap {
+  display: flex;
+  align-items: center;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0 12px;
+  height: 38px;
+  transition: all 0.2s;
+}
+.chat-search-input-wrap:focus-within {
+  border-color: #2563eb;
+  background: #ffffff;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.12);
+}
+.chat-search-input-wrap i {
+  color: #94a3b8;
+  font-size: 13px;
+}
+.chat-search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 13px;
+  padding: 0 8px;
+  color: #0f172a;
+  font-weight: 500;
+}
+.chat-search-input::placeholder {
+  color: #94a3b8;
+}
+.chat-search-clear {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 4px;
+  font-size: 12px;
+}
+
+/* Filter Tabs */
+.chat-filter-tabs {
+  display: flex;
+  gap: 8px;
+}
+.chat-filter-tab {
+  padding: 4px 12px;
+  border-radius: 14px;
+  font-size: 11px;
+  font-weight: 700;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.chat-filter-tab:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+.chat-filter-tab.active {
+  background: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+}
+
+/* Threads List Scroll Area */
+.chat-threads-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 6px 0;
+}
+.chat-threads-empty {
+  padding: 40px 20px;
+  text-align: center;
+  color: #94a3b8;
+}
+
+/* Individual Thread Item */
+.chat-thread-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-left: 3px solid transparent;
+  position: relative;
+}
+.chat-thread-item:hover {
+  background: #f8fafc;
+}
+.chat-thread-item.active {
+  background: #eff6ff;
+  border-left-color: #2563eb;
+}
+
+.chat-thread-avatar-wrap {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+}
+.chat-thread-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+.chat-online-pulse {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #10b981;
+  border: 2px solid #ffffff;
+}
+
+.chat-thread-info {
+  flex: 1;
+  min-width: 0;
+}
+.chat-thread-top-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 2px;
+}
+.chat-thread-name {
+  font-size: 14px;
+  font-weight: 800;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.chat-thread-time {
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+.chat-thread-car-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #f1f5f9;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #334155;
+  margin: 2px 0 4px 0;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.chat-thread-car-pill i {
+  color: var(--primary);
+  font-size: 10px;
+}
+.chat-thread-bottom-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.chat-thread-preview {
+  font-size: 12px;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+.chat-unread-badge {
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 800;
+  border-radius: 10px;
+  padding: 1px 6px;
+  margin-left: 6px;
+  flex-shrink: 0;
+}
+
+/* --------------------------------------------------------------------------
+   RIGHT COLUMN: ACTIVE CHAT MAIN STAGE
+   -------------------------------------------------------------------------- */
+.chat-main-stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #f8fafc;
+  min-width: 0;
+  position: relative;
+  height: 100%;
+}
+
+/* Active Seller Header */
+.chat-active-header {
+  padding: 12px 20px;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.chat-mobile-back-btn {
+  background: #f1f5f9;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 14px;
+  color: #0f172a;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chat-header-avatar-wrap {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+}
+.chat-header-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.chat-online-dot {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  background: #10b981;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+}
+
+.chat-header-name {
+  font-size: 16px;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0;
+}
+.chat-seller-badge {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.chat-header-sub {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #64748b;
+  margin-top: 2px;
+}
+.chat-status-active {
+  color: #16a34a;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.status-dot {
+  width: 6px;
+  height: 6px;
+  background: #16a34a;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* Header CTAs */
+.chat-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.chat-whatsapp-btn {
+  background: #25d366;
+  color: #ffffff;
+  padding: 7px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(37, 211, 102, 0.3);
+}
+.chat-whatsapp-btn:hover {
+  background: #1eb956;
+  transform: translateY(-1px);
+}
+.chat-call-btn {
+  background: #002f34;
+  color: #ffffff;
+  padding: 7px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.chat-call-btn:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+}
+.chat-header-close-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  transition: all 0.2s;
+}
+.chat-header-close-btn:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+/* Pinned Linked Car Banner (OLX style) */
+.chat-car-banner {
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 10px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+.chat-car-banner-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  flex: 1;
+  min-width: 0;
+}
+.chat-car-banner-thumb {
+  width: 52px;
+  height: 42px;
+  border-radius: 6px;
+  object-fit: cover;
+  flex-shrink: 0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+.chat-car-banner-meta {
+  flex: 1;
+  min-width: 0;
+}
+.chat-car-banner-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.chat-car-banner-price {
+  font-size: 14px;
+  font-weight: 900;
+  color: #2563eb;
+  font-family: var(--font-heading);
+}
+.chat-car-banner-specs {
+  font-size: 11px;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chat-car-banner-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.chat-offer-trigger-btn {
+  background: #fef3c7;
+  border: 1px solid #fde68a;
+  color: #b45309;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+.chat-offer-trigger-btn:hover {
+  background: #fde68a;
+}
+.chat-view-car-btn {
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  color: #334155;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+.chat-view-car-btn:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+/* In-Chat Make an Offer Drawer */
+.chat-offer-drawer {
+  background: #ffffff;
+  border-bottom: 2px solid #e2e8f0;
+  padding: 16px 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+  flex-shrink: 0;
+  animation: slideDown 0.2s ease-out;
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.chat-offer-quick-pills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.chat-offer-pill {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  padding: 4px 10px;
+  border-radius: 14px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.chat-offer-pill:hover {
+  background: #eff6ff;
+  border-color: #2563eb;
+  color: #2563eb;
+}
+
+.chat-offer-input-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: #f8fafc;
+  border: 2px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 0 12px;
+  height: 42px;
+  transition: border-color 0.2s;
+}
+.chat-offer-input-wrap:focus-within {
+  border-color: #2563eb;
+  background: #ffffff;
+}
+.chat-offer-currency {
+  font-size: 16px;
+  font-weight: 900;
+  color: #64748b;
+  margin-right: 6px;
+}
+.chat-offer-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 14px;
+  font-weight: 800;
+  color: #0f172a;
+}
+.chat-offer-submit-btn {
+  background: #2563eb;
+  color: #ffffff;
+  font-weight: 900;
+  padding: 0 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.2s;
+}
+.chat-offer-submit-btn:hover {
+  background: #1d4ed8;
+}
+.chat-offer-submit-btn:disabled {
+  background: #cbd5e1;
+  cursor: not-allowed;
+}
+
+/* --------------------------------------------------------------------------
+   MESSAGES HISTORY STREAM
+   -------------------------------------------------------------------------- */
+.chat-messages-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background-color: #f8fafc;
+  background-image: radial-gradient(#e2e8f0 0.75px, transparent 0.75px);
+  background-size: 16px 16px;
+}
+
+.chat-safety-pill {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #166534;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 auto 6px auto;
+  max-width: 90%;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.chat-date-separator {
+  text-align: center;
+  margin: 4px 0;
+  position: relative;
+}
+.chat-date-separator span {
+  background: #e2e8f0;
+  color: #64748b;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 10px;
+  letter-spacing: 0.5px;
+}
+
+/* Message Rows & Bubbles */
+.chat-bubble-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  max-width: 78%;
+}
+.chat-bubble-row.seller {
+  align-self: flex-start;
+}
+.chat-bubble-row.me {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.chat-bubble-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.chat-bubble {
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-size: 13px;
+  line-height: 1.5;
+  position: relative;
+  word-break: break-word;
+}
+.chat-bubble.seller {
+  background: #ffffff;
+  color: #0f172a;
+  border-bottom-left-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e2e8f0;
+}
+.chat-bubble.me {
+  background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+  color: #ffffff;
+  border-bottom-right-radius: 4px;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+}
+
+.chat-bubble-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 4px;
+}
+.chat-bubble-time {
+  font-size: 10px;
+  opacity: 0.7;
+}
+.chat-bubble-check {
+  font-size: 10px;
+  color: #93c5fd;
+}
+
+/* Rich Card Messages (Offers, Testdrive, Docs) */
+.chat-special-card {
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 4px;
+}
+.chat-special-card.offer {
+  background: rgba(254, 243, 199, 0.25);
+  border-left: 3px solid #f59e0b;
+}
+.chat-special-card.testdrive {
+  background: rgba(240, 253, 244, 0.25);
+  border-left: 3px solid #10b981;
+}
+.chat-special-card.docs {
+  background: rgba(239, 246, 255, 0.25);
+  border-left: 3px solid #3b82f6;
+}
+
+.special-card-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  margin-bottom: 4px;
+  letter-spacing: 0.5px;
+}
+.special-card-body {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.special-card-status {
+  font-size: 11px;
+  font-weight: 700;
+  opacity: 0.85;
+  margin-top: 6px;
+}
+
+/* Typing Indicator Animation */
+.chat-bubble.typing {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px;
+}
+.typing-dots {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  height: 14px;
+}
+.typing-dots span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #64748b;
+  animation: typingBounce 1s infinite ease-in-out;
+}
+.typing-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.typing-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+@keyframes typingBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+/* Quick Suggestion Chips Strip */
+.chat-quick-replies-row {
+  display: flex;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #ffffff;
+  border-top: 1px solid #f1f5f9;
+  overflow-x: auto;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.chat-quick-chip {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+.chat-quick-chip:hover {
+  background: #eff6ff;
+  border-color: #2563eb;
+  color: #2563eb;
+}
+
+/* Attachment Menu Popup */
+.chat-attachment-menu {
+  position: absolute;
+  bottom: 66px;
+  left: 20px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+  border: 1px solid #e2e8f0;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 50;
+  width: 250px;
+  animation: popIn 0.15s ease-out;
+}
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.chat-attach-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s;
+}
+.chat-attach-item:hover {
+  background: #f1f5f9;
+}
+.chat-attach-item i {
+  font-size: 18px;
+  width: 24px;
+  text-align: center;
+}
+.chat-attach-item strong {
+  display: block;
+  font-size: 12px;
+  color: #0f172a;
+}
+.chat-attach-item span {
+  font-size: 10px;
+  color: #64748b;
+}
+
+/* Bottom Input Bar */
+.chat-input-bar {
+  padding: 12px 18px;
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  position: relative;
+}
+.chat-action-menu-toggle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.chat-action-menu-toggle:hover,
+.chat-action-menu-toggle.active {
+  background: #eff6ff;
+  color: #2563eb;
+  border-color: #bfdbfe;
+  transform: rotate(45deg);
+}
+
+.chat-text-input {
+  flex: 1;
+  background: #f8fafc;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 24px;
+  padding: 10px 18px;
+  font-size: 14px;
+  color: #0f172a;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.chat-text-input:focus {
+  border-color: #2563eb;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+.chat-text-input::placeholder {
+  color: #94a3b8;
+}
+
+.chat-send-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #2563eb;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.35);
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.chat-send-btn:hover:not(:disabled) {
+  background: #1d4ed8;
+  transform: scale(1.05);
+}
+.chat-send-btn:disabled {
+  background: #cbd5e1;
+  color: #94a3b8;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Empty selection stage */
+.chat-no-selection-screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px;
+}
+.chat-no-selection-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: #eff6ff;
+  color: #2563eb;
+  font-size: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+/* --------------------------------------------------------------------------
+   CHAT RESPONSIVENESS (MOBILE / TABLET)
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  .chat-modal-window {
+    width: 100vw;
+    max-width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+  .chat-sidebar-threads {
+    width: 100%;
+  }
+  .chat-sidebar-threads.hide-on-mobile-view {
+    display: none !important;
+  }
+  .chat-main-stage.hide-on-mobile-view {
+    display: none !important;
+  }
+  .chat-car-banner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .chat-car-banner-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+  .chat-bubble-row {
+    max-width: 90%;
+  }
+}
+
+/* ==========================================================================
+   UNIVERSAL ICON BUTTON & ICON CENTER ALIGNMENT SYSTEM (APP & WEB)
+   ========================================================================== */
+
+/* 1. Dedicated Icon Buttons - Perfect Horizontal & Vertical Dead-Center Alignment */
+.olx-card-heart-btn,
+.car-modal-fav-btn,
+.car-modal-close-btn,
+.car-modal-share-btn,
+.modal-close-x-btn,
+.olx-drawer-toggle-btn,
+.olx-nav-icon-btn,
+.olx-search-submit-btn,
+.olx-search-clear,
+.drawer-close-btn,
+.drawer-search-clear,
+.chat-mobile-back-btn,
+.chat-header-close-btn,
+.chat-close-btn-mobile,
+.chat-action-menu-toggle,
+.chat-send-btn,
+.chat-search-clear,
+.chat-attach-btn,
+.wizard-photo-del-btn,
+.android-menu-icon,
+.android-notif-btn,
+.bottom-nav-sell-circle,
+.icon-btn,
+.btn-icon,
+button.icon-btn,
+button.btn-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  padding: 0 !important;
+  line-height: 1 !important;
+  box-sizing: border-box !important;
+  vertical-align: middle !important;
+}
+
+/* 2. Reset FontAwesome and SVG baseline shifts inside all buttons & icon containers */
+.olx-card-heart-btn i,
+.car-modal-fav-btn i,
+.car-modal-close-btn i,
+.car-modal-share-btn i,
+.modal-close-x-btn i,
+.olx-drawer-toggle-btn i,
+.olx-nav-icon-btn i,
+.olx-search-submit-btn i,
+.olx-search-clear i,
+.drawer-close-btn i,
+.drawer-search-clear i,
+.chat-mobile-back-btn i,
+.chat-header-close-btn i,
+.chat-close-btn-mobile i,
+.chat-action-menu-toggle i,
+.chat-send-btn i,
+.chat-search-clear i,
+.chat-attach-btn i,
+.wizard-photo-del-btn i,
+.android-menu-icon i,
+.android-notif-btn i,
+.bottom-nav-sell-circle i,
+.icon-btn i,
+.btn-icon i,
+button.icon-btn i,
+button.btn-icon i,
+button i,
+button svg,
+.btn i,
+.btn svg {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+  vertical-align: 0 !important;
+  margin: 0 !important;
+  transform: none;
+}
+
+/* Special fix for paper plane icon optical balance */
+.chat-send-btn i.fa-paper-plane {
+  margin-left: 2px !important;
+  margin-top: 1px !important;
+}
+
+/* 3. Action Buttons with Icon + Text (Center icon with text horizontally & vertically) */
+.olx-sell-button,
+.btn-primary,
+.btn-secondary,
+.btn-outline,
+.olx-all-cats-btn,
+.olx-city-btn,
+.chat-whatsapp-btn,
+.chat-call-btn,
+.android-city-btn,
+.android-frame-exit-btn,
+.olx-lang-btn,
+.bottom-nav-item,
+.bottom-nav-item-sell {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  vertical-align: middle !important;
+  box-sizing: border-box !important;
+}
+
+.olx-sell-button i,
+.btn-primary i,
+.btn-secondary i,
+.btn-outline i,
+.olx-all-cats-btn i,
+.olx-city-btn i,
+.chat-whatsapp-btn i,
+.chat-call-btn i,
+.android-city-btn i,
+.android-frame-exit-btn i,
+.bottom-nav-item i,
+.bottom-nav-item-sell i {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+  vertical-align: 0 !important;
+}
