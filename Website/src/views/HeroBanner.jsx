@@ -73,15 +73,15 @@ export function HeroBanner({
             </div>
           </div>
 
-          <a href="#emi-calculator" className="olx-action-card">
+          <div className="olx-action-card" onClick={onOpenSellWizard}>
             <div className="olx-action-icon" style={{ background: '#fef3c7', color: '#d97706' }}>
-              <i className="fa-solid fa-calculator"></i>
+              <i className="fa-solid fa-file-signature"></i>
             </div>
             <div>
-              <div className="olx-action-title">Car Loan EMI</div>
-              <div className="olx-action-desc">Rates Starting @ 8.5%</div>
+              <div className="olx-action-title">RC Transfer Help</div>
+              <div className="olx-action-desc">100% Free Paperwork</div>
             </div>
-          </a>
+          </div>
 
           <div className="olx-action-card" onClick={onOpenCityModal}>
             <div className="olx-action-icon" style={{ background: '#f5f3ff', color: '#7c3aed' }}>

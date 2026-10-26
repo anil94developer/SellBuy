@@ -7,6 +7,7 @@ import {
   setCarsPage,
   toggleFavoriteRequest,
   setSavedCarIds,
+  setSavedCars,
   createCarRequest,
   updateCarRequest,
   deleteCarRequest
@@ -14,6 +15,7 @@ import {
 
 // Selector to get current filters
 const selectFilters = (state) => state.cars.filters;
+const selectCurrentUser = (state) => state.auth.currentUser;
 
 function* fetchCarsWorker() {
   try {
@@ -51,10 +53,21 @@ function* fetchCarsWorker() {
 
 function* toggleFavoriteWorker(action) {
   try {
-    const carId = action.payload;
-    yield call(ApiService.toggleFavorite, carId);
-    const updated = ApiService.getSavedCarIds();
-    yield put(setSavedCarIds(updated));
+    const currentUser = yield select(selectCurrentUser);
+    const payload = typeof action.payload === 'object' ? action.payload : { carId: action.payload, userId: currentUser?.id };
+    const res = yield call(ApiService.toggleFavorite, payload.carId, payload.userId);
+    if (res && res.savedCarIds) {
+      yield put(setSavedCarIds(res.savedCarIds));
+    } else {
+      const updated = ApiService.getSavedCarIds();
+      yield put(setSavedCarIds(updated));
+    }
+    if (payload.userId) {
+      const savedRes = yield call(ApiService.getSavedCars, payload.userId);
+      if (savedRes && savedRes.savedCars) {
+        yield put(setSavedCars(savedRes.savedCars));
+      }
+    }
   } catch (err) {
     console.error('toggleFavorite error:', err);
   }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAdminViewModel } from './viewmodels/useAdminViewModel';
 import { AdminHeader, AdminSidebar } from './views/AdminNav';
 import {
@@ -102,15 +102,26 @@ export default function App() {
     deleteCity,
     sendBroadcast
   } = useAdminViewModel();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div style={{ background: '#0a0e17', minHeight: '100vh', color: '#f1f5f9', display: 'flex', flexDirection: 'column' }}>
-      <AdminHeader lang={lang} toggleLang={toggleLang} />
+    <div className="admin-app-layout" style={{ background: '#0a0e17', minHeight: '100vh', color: '#f1f5f9', display: 'flex', flexDirection: 'column' }}>
+      <AdminHeader
+        lang={lang}
+        toggleLang={toggleLang}
+        isSidebarOpen={isSidebarOpen}
+        onToggleSidebar={() => setIsSidebarOpen(prev => !prev)}
+      />
 
-      <div style={{ display: 'flex', flex: 1, minHeight: 'calc(100vh - 65px)' }}>
-        <AdminSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+      <div className="admin-body-container" style={{ display: 'flex', flex: 1, minHeight: 'calc(100vh - 65px)', position: 'relative' }}>
+        <AdminSidebar
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          isOpen={isSidebarOpen}
+          onClose={() => setIsSidebarOpen(false)}
+        />
 
-        <main style={{ flex: 1, padding: '28px 32px', overflowY: 'auto', background: '#0d131f' }}>
+        <main className="admin-main-content">
           {/* GROUP 1: MAIN MENU */}
           {activeTab === 'dashboard' && (
             <DashboardSection

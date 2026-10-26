@@ -9,8 +9,17 @@ router.get('/', async (req, res) => {
     const { userId, type } = req.query;
     if (!userId) return res.status(400).json({ success: false, message: 'User ID is required' });
 
+    let targetUserId = userId;
+    if (isNaN(userId)) {
+      const cleanPhone = String(userId).replace(/\D/g, '').slice(-10);
+      if (cleanPhone) {
+        const u = (await query('SELECT id FROM users WHERE phone = ?', [cleanPhone]))[0];
+        if (u) targetUserId = u.id;
+      }
+    }
+
     let sql = 'SELECT * FROM notifications WHERE user_id = ?';
-    const params = [userId];
+    const params = [targetUserId];
 
     if (type && type !== 'all') {
       sql += ' AND type = ?';
@@ -19,14 +28,43 @@ router.get('/', async (req, res) => {
 
     sql += ' ORDER BY created_at DESC';
 
-    const notifications = await query(sql, params);
-    const unreadCount = notifications.filter(n => !n.is_read).length;
+    const rawNotifs = await query(sql, params);
+    const notifications = rawNotifs.map(n => ({
+      id: String(n.id),
+      title: n.title,
+      message: n.message,
+      type: n.type,
+      read: Boolean(n.is_read),
+      time: new Date(n.created_at).toLocaleDateString()
+    }));
+    const unreadCount = notifications.filter(n => !n.read).length;
 
     res.json({
       success: true,
       unreadCount,
       notifications
     });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// PATCH /api/notifications/read-all
+router.patch('/read-all', async (req, res) => {
+  try {
+    const { userId } = req.body;
+    let targetUserId = userId;
+    if (isNaN(userId)) {
+      const cleanPhone = String(userId).replace(/\D/g, '').slice(-10);
+      if (cleanPhone) {
+        const u = (await query('SELECT id FROM users WHERE phone = ?', [cleanPhone]))[0];
+        if (u) targetUserId = u.id;
+      }
+    }
+    if (targetUserId) {
+      await query('UPDATE notifications SET is_read = 1 WHERE user_id = ?', [targetUserId]);
+    }
+    res.json({ success: true, message: 'All notifications marked as read' });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }

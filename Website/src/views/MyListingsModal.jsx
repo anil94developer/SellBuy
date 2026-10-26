@@ -5,6 +5,7 @@ export function MyListingsModal({
   isOpen,
   onClose,
   listings = [],
+  counts,
   activeTab = 'all',
   onTabChange,
   onEditListing,
@@ -18,6 +19,14 @@ export function MyListingsModal({
     if (activeTab === 'all') return true;
     return (item.status || 'active') === activeTab;
   });
+
+  const getTabCount = (tab) => {
+    if (counts) {
+      if (tab === 'all') return (Number(counts.active || 0) + Number(counts.pending || 0) + Number(counts.sold || 0)) || listings.length;
+      if (counts[tab] !== undefined) return counts[tab];
+    }
+    return listings.filter(l => tab === 'all' ? true : (l.status || 'active') === tab).length;
+  };
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -46,7 +55,7 @@ export function MyListingsModal({
                 className={`web-tab-pill ${activeTab === tab ? 'active' : ''}`}
                 onClick={() => onTabChange(tab)}
               >
-                {tab.charAt(0).toUpperCase() + tab.slice(1)} ({listings.filter(l => tab === 'all' ? true : (l.status || 'active') === tab).length})
+                {tab.charAt(0).toUpperCase() + tab.slice(1)} ({getTabCount(tab)})
               </button>
             ))}
           </div>

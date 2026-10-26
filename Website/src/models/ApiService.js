@@ -1,24 +1,9 @@
-// Website Model: API Client with automatic offline/mock resilience
-import {
-  INITIAL_CARS,
-  INITIAL_BRANDS,
-  INITIAL_CITIES,
-  INITIAL_USER,
-  INITIAL_NOTIFICATIONS,
-  INITIAL_CONVERSATION,
-  INITIAL_CONVERSATIONS
-} from './MockData';
-
-// Local storage keys
+// Website Model: Dynamic API Client connected to real database
 const STORAGE_KEYS = {
-  CARS: 'sellbuy_cars',
   USER: 'sellbuy_user',
-  SAVED: 'sellbuy_saved_car_ids',
-  CONVERSATIONS: 'sellbuy_conversations',
-  NOTIFICATIONS: 'sellbuy_notifications',
+  SAVED: 'sellbuy_saved_car_ids'
 };
 
-// Initialize local storage defaults
 function getStored(key, defaultVal) {
   try {
     const raw = localStorage.getItem(key);
@@ -37,89 +22,79 @@ function setStored(key, val) {
 }
 
 export const ApiService = {
-  // Cars API
+  // 1. CARS MARKETPLACE API (Dynamic from MySQL car_listings)
   async getCars(params = {}) {
     try {
-      const q = new URLSearchParams(params).toString();
+      const cleanParams = {};
+      Object.keys(params).forEach(k => {
+        if (params[k] !== undefined && params[k] !== null && params[k] !== '') {
+          cleanParams[k] = params[k];
+        }
+      });
+      const q = new URLSearchParams(cleanParams).toString();
       const res = await fetch(`/api/cars?${q}`);
       if (res.ok) {
         const data = await res.json();
-        if (data.success && data.cars && data.cars.length > 0) {
-          return data;
+        if (data.success && Array.isArray(data.cars)) {
+          const formattedCars = data.cars.map(c => ({
+            ...c,
+            id: String(c.id),
+            brand: c.brand_name || c.brand,
+            model: c.model_name || c.model,
+            year: c.manufacturing_year || c.year,
+            formattedPrice: c.formattedPrice || ('₹ ' + Number(c.price).toLocaleString('en-IN')),
+            imageUrl: c.primary_image || c.imageUrl || '/assets/cars/creta.jpg',
+            primary_image: c.primary_image || c.imageUrl || '/assets/cars/creta.jpg',
+            location: c.reg_city || c.location || 'Jaipur, Rajasthan',
+            mileage: c.km_driven || 0,
+            km_driven: c.km_driven || 0,
+            is_favorited: Boolean(c.is_favorited)
+          }));
+          return {
+            success: true,
+            count: data.count || formattedCars.length,
+            cars: formattedCars,
+            pagination: data.pagination
+          };
         }
       }
-    } catch {
-      // Backend unavailable, fallback to stored mock
+    } catch (err) {
+      console.error('Failed to load cars from backend:', err);
     }
-
-    // Client-side filter fallback
-    let allCars = getStored(STORAGE_KEYS.CARS, INITIAL_CARS);
-    let filtered = [...allCars];
-
-    if (params.q) {
-      const query = params.q.toLowerCase().trim();
-      filtered = filtered.filter(c =>
-        c.title?.toLowerCase().includes(query) ||
-        c.brand?.toLowerCase().includes(query) ||
-        c.model?.toLowerCase().includes(query) ||
-        c.reg_city?.toLowerCase().includes(query) ||
-        c.location?.toLowerCase().includes(query)
-      );
-    }
-
-    if (params.brand) {
-      filtered = filtered.filter(c => c.brand?.toLowerCase() === params.brand.toLowerCase());
-    }
-
-    if (params.city) {
-      filtered = filtered.filter(c => (c.reg_city || c.location || '').toLowerCase().includes(params.city.toLowerCase()));
-    }
-
-    if (params.maxPrice) {
-      filtered = filtered.filter(c => Number(c.price) <= Number(params.maxPrice));
-    }
-
-    if (params.minPrice) {
-      filtered = filtered.filter(c => Number(c.price) >= Number(params.minPrice));
-    }
-
-    if (params.fuel) {
-      filtered = filtered.filter(c => (c.fuel_type || c.fuelType || '').toLowerCase() === params.fuel.toLowerCase());
-    }
-
-    if (params.transmission) {
-      filtered = filtered.filter(c => (c.transmission || '').toLowerCase() === params.transmission.toLowerCase());
-    }
-
-    if (params.yearFrom) {
-      filtered = filtered.filter(c => Number(c.manufacturing_year || c.year) >= Number(params.yearFrom));
-    }
-
-    if (params.yearTo) {
-      filtered = filtered.filter(c => Number(c.manufacturing_year || c.year) <= Number(params.yearTo));
-    }
-
-    if (params.tab && params.tab !== 'all') {
-      if (params.tab === 'certified') filtered = filtered.filter(c => c.is_certified);
-      if (params.tab === 'used') filtered = filtered.filter(c => (c.km_driven || c.mileage || 0) > 1000);
-      if (params.tab === 'new') filtered = filtered.filter(c => (c.manufacturing_year || c.year) >= 2022);
-    }
-
-    return { success: true, cars: filtered };
+    return { success: true, count: 0, cars: [], pagination: { page: 1, limit: 12, total: 0, totalPages: 1 } };
   },
 
-  async getCarDetails(id) {
+  async getCarDetails(id, userId) {
     try {
-      const res = await fetch(`/api/cars/${id}`);
+      const q = userId ? `?userId=${userId}` : '';
+      const res = await fetch(`/api/cars/${id}${q}`);
       if (res.ok) {
         const data = await res.json();
-        if (data.success && data.car) return data;
+        if (data.success && data.car) {
+          const c = data.car;
+          return {
+            success: true,
+            car: {
+              ...c,
+              id: String(c.id),
+              brand: c.brand_name || c.brand,
+              model: c.model_name || c.model,
+              year: c.manufacturing_year || c.year,
+              formattedPrice: c.formattedPrice || ('₹ ' + Number(c.price).toLocaleString('en-IN')),
+              imageUrl: c.primary_image || (c.images && c.images[0]) || '/assets/cars/creta.jpg',
+              primary_image: c.primary_image || (c.images && c.images[0]) || '/assets/cars/creta.jpg',
+              location: c.reg_city || 'Jaipur, Rajasthan',
+              mileage: c.km_driven || 0,
+              km_driven: c.km_driven || 0,
+              is_favorited: Boolean(c.is_favorited)
+            }
+          };
+        }
       }
-    } catch {}
-
-    const allCars = getStored(STORAGE_KEYS.CARS, INITIAL_CARS);
-    const car = allCars.find(c => String(c.id) === String(id)) || allCars[0];
-    return { success: true, car };
+    } catch (e) {
+      console.error('Failed to fetch car details from database:', e);
+    }
+    return { success: false, message: 'Vehicle details not available' };
   },
 
   async getBrands() {
@@ -127,10 +102,12 @@ export const ApiService = {
       const res = await fetch('/api/meta/brands');
       if (res.ok) {
         const data = await res.json();
-        if (data.success && data.brands) return data;
+        if (data.success && Array.isArray(data.brands)) return data;
       }
-    } catch {}
-    return { success: true, brands: INITIAL_BRANDS };
+    } catch (e) {
+      console.error('Failed to fetch brands:', e);
+    }
+    return { success: true, brands: [] };
   },
 
   async getCities() {
@@ -138,145 +115,327 @@ export const ApiService = {
       const res = await fetch('/api/meta/cities');
       if (res.ok) {
         const data = await res.json();
-        if (data.success && data.cities) return data;
+        if (data.success && Array.isArray(data.cities)) return data;
       }
-    } catch {}
-    return { success: true, cities: INITIAL_CITIES };
+    } catch (e) {
+      console.error('Failed to fetch cities:', e);
+    }
+    return { success: true, cities: [] };
   },
 
+  // 2. CAR SELL / ADD / UPDATE / DELETE (Real database operations)
   async createListing(carData) {
-    let newCar = null;
     try {
       const res = await fetch('/api/cars', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(carData)
       });
-      if (res.ok) {
-        const data = await res.json();
-        if (data.success) newCar = data.car;
+      const data = await res.json().catch(() => null);
+      if (data && data.success) {
+        return data;
       }
-    } catch {}
-
-    if (!newCar) {
-      newCar = {
-        id: String(Date.now()),
-        title: carData.title || `${carData.brand || 'Vehicle'} ${carData.model || ''} ${carData.year || 2022}`,
-        brand: carData.brand || 'Maruti',
-        model: carData.model || '',
-        year: Number(carData.year || carData.manufacturingYear) || 2022,
-        manufacturing_year: Number(carData.year || carData.manufacturingYear) || 2022,
-        price: Number(carData.price) || 500000,
-        formattedPrice: '₹ ' + Number(carData.price || 500000).toLocaleString('en-IN'),
-        km_driven: Number(carData.kmDriven || carData.km_driven) || 25000,
-        mileage: Number(carData.kmDriven || carData.km_driven) || 25000,
-        fuel_type: carData.fuelType || 'Petrol',
-        fuelType: carData.fuelType || 'Petrol',
-        transmission: carData.transmission || 'Manual',
-        reg_city: carData.regCity || carData.city || 'Jaipur, Rajasthan',
-        location: carData.regCity || carData.city || 'Jaipur, Rajasthan',
-        description: carData.description || 'Pre-owned certified vehicle in great running condition.',
-        ownership: carData.ownership || '1st Owner',
-        badge: 'Newly Listed',
-        is_certified: false,
-        is_featured: false,
-        primary_image: (carData.images && carData.images[0]) || carData.imageUrl || 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=800&q=80',
-        imageUrl: (carData.images && carData.images[0]) || carData.imageUrl || 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=800&q=80',
-        images: carData.images && carData.images.length ? carData.images : [
-          'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=800&q=80',
-          'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=800&q=80'
-        ],
-        seller_name: carData.sellerName || 'Rakesh Sharma',
-        seller_phone: carData.sellerPhone || '+91 98765-43210',
-        seller_rating: 4.8,
-        seller_verified: true,
-        seller_joined: 'Member since 2022',
-        status: 'active'
-      };
+      return { success: false, message: data?.message || 'Failed to publish vehicle listing' };
+    } catch (err) {
+      console.error('Failed to publish listing to database:', err);
+      return { success: false, message: err.message };
     }
-
-    const allCars = getStored(STORAGE_KEYS.CARS, INITIAL_CARS);
-    const updated = [newCar, ...allCars];
-    setStored(STORAGE_KEYS.CARS, updated);
-
-    return { success: true, car: newCar, message: 'Vehicle listed successfully!' };
   },
 
   async updateListing(id, updates) {
     try {
-      await fetch(`/api/cars/${id}`, {
+      const res = await fetch(`/api/cars/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updates)
       });
-    } catch {}
-
-    const allCars = getStored(STORAGE_KEYS.CARS, INITIAL_CARS);
-    const updated = allCars.map(c => String(c.id) === String(id) ? { ...c, ...updates } : c);
-    setStored(STORAGE_KEYS.CARS, updated);
-    return { success: true };
+      const data = await res.json().catch(() => null);
+      return data || { success: true };
+    } catch (e) {
+      return { success: false, message: e.message };
+    }
   },
 
   async deleteListing(id) {
     try {
-      await fetch(`/api/cars/${id}`, { method: 'DELETE' });
-    } catch {}
-
-    const allCars = getStored(STORAGE_KEYS.CARS, INITIAL_CARS);
-    const updated = allCars.filter(c => String(c.id) !== String(id));
-    setStored(STORAGE_KEYS.CARS, updated);
-    return { success: true };
+      const res = await fetch(`/api/cars/${id}`, { method: 'DELETE' });
+      const data = await res.json().catch(() => null);
+      return data || { success: true };
+    } catch (e) {
+      return { success: false, message: e.message };
+    }
   },
 
-  // Auth API
+  async updateListingStatus(id, status) {
+    try {
+      const res = await fetch(`/api/cars/${id}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status })
+      });
+      return await res.json().catch(() => ({ success: true }));
+    } catch (e) {
+      return { success: false, message: e.message };
+    }
+  },
+
+  // 3. USER'S LISTINGS ("My Listed Vehicles" linked to user ID in database)
+  async getUserListings(userId, status = 'all') {
+    if (!userId) return { success: true, counts: { active: 0, pending: 0, sold: 0 }, listings: [] };
+    try {
+      const res = await fetch(`/api/cars/user/${userId}?status=${status}`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && Array.isArray(data.listings)) {
+          const listings = data.listings.map(l => ({
+            ...l,
+            id: String(l.id),
+            brand: l.brand_name || l.brand,
+            model: l.model_name || l.model,
+            year: l.manufacturing_year || l.year,
+            formattedPrice: l.formattedPrice || ('₹ ' + Number(l.price).toLocaleString('en-IN')),
+            imageUrl: l.primary_image || (l.images && l.images[0]) || '/assets/cars/creta.jpg',
+            primary_image: l.primary_image || (l.images && l.images[0]) || '/assets/cars/creta.jpg',
+            location: l.reg_city || 'Jaipur, Rajasthan',
+            mileage: l.km_driven || 0,
+            km_driven: l.km_driven || 0
+          }));
+          return { success: true, counts: data.counts || { active: 0, pending: 0, sold: 0 }, listings };
+        }
+      }
+    } catch (e) {
+      console.error('Failed to fetch user listings from database:', e);
+    }
+    return { success: true, counts: { active: 0, pending: 0, sold: 0 }, listings: [] };
+  },
+
+  // 4. FAVORITES & WISHLIST (Linked to user ID in database favorites table)
+  async getSavedCars(userId) {
+    const resolvedUserId = userId || getStored(STORAGE_KEYS.USER, null)?.id;
+    if (!resolvedUserId) return { success: true, savedCars: [], savedCarIds: [] };
+    try {
+      const res = await fetch(`/api/cars/user/${resolvedUserId}/saved`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && Array.isArray(data.savedCars)) {
+          const savedCars = data.savedCars.map(c => ({
+            ...c,
+            id: String(c.id),
+            brand: c.brand_name || c.brand,
+            model: c.model_name || c.model,
+            year: c.manufacturing_year || c.year,
+            formattedPrice: c.formattedPrice || ('₹ ' + Number(c.price).toLocaleString('en-IN')),
+            imageUrl: c.primary_image || (c.images && c.images[0]) || '/assets/cars/creta.jpg',
+            primary_image: c.primary_image || (c.images && c.images[0]) || '/assets/cars/creta.jpg',
+            location: c.reg_city || 'Jaipur, Rajasthan',
+            mileage: c.km_driven || 0,
+            km_driven: c.km_driven || 0,
+            is_favorited: true
+          }));
+          const savedCarIds = savedCars.map(c => String(c.id));
+          setStored(STORAGE_KEYS.SAVED, savedCarIds);
+          return { success: true, savedCars, savedCarIds, count: savedCars.length };
+        }
+      }
+    } catch (e) {
+      console.error('Failed to fetch saved cars from database:', e);
+    }
+    return { success: true, savedCars: [], savedCarIds: getStored(STORAGE_KEYS.SAVED, []) };
+  },
+
+  async toggleFavorite(carId, userId) {
+    const resolvedUserId = userId || getStored(STORAGE_KEYS.USER, null)?.id;
+    if (!resolvedUserId) {
+      // Local fallback if guest
+      const list = getStored(STORAGE_KEYS.SAVED, []);
+      const exists = list.includes(String(carId));
+      const updated = exists ? list.filter(id => id !== String(carId)) : [...list, String(carId)];
+      setStored(STORAGE_KEYS.SAVED, updated);
+      return { success: true, isFavorited: !exists, savedCarIds: updated, savedCount: updated.length };
+    }
+    try {
+      const res = await fetch(`/api/cars/${carId}/favorite`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: resolvedUserId })
+      });
+      const data = await res.json().catch(() => null);
+      if (data && data.success) {
+        if (data.savedCarIds) setStored(STORAGE_KEYS.SAVED, data.savedCarIds);
+        return data;
+      }
+    } catch (e) {
+      console.warn('Backend toggleFavorite failed:', e);
+    }
+    const list = getStored(STORAGE_KEYS.SAVED, []);
+    const exists = list.includes(String(carId));
+    const updated = exists ? list.filter(id => id !== String(carId)) : [...list, String(carId)];
+    setStored(STORAGE_KEYS.SAVED, updated);
+    return { success: true, isFavorited: !exists, savedCarIds: updated, savedCount: updated.length };
+  },
+
+  getSavedCarIds() {
+    return getStored(STORAGE_KEYS.SAVED, []);
+  },
+
+  // 5. CHAT & MESSAGING API (Real database tables chats & chat_messages)
+  async getConversations(userId) {
+    const resolvedUserId = userId || getStored(STORAGE_KEYS.USER, null)?.id;
+    if (!resolvedUserId) return [];
+    try {
+      const res = await fetch(`/api/chats?userId=${resolvedUserId}`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && Array.isArray(data.chats)) {
+          return data.chats;
+        }
+      }
+    } catch (e) {
+      console.error('Failed to fetch conversations from database:', e);
+    }
+    return [];
+  },
+
+  async getChatMessages(chatId, userId) {
+    try {
+      const resolvedUserId = userId || getStored(STORAGE_KEYS.USER, null)?.id;
+      const q = resolvedUserId ? `?userId=${resolvedUserId}` : '';
+      const res = await fetch(`/api/chats/${chatId}/messages${q}`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success) return data;
+      }
+    } catch (e) {
+      console.error('Failed to fetch chat messages from database:', e);
+    }
+    return { success: false, messages: [] };
+  },
+
+  async startChat(buyerId, sellerId, listingId, initialMessage) {
+    try {
+      const resolvedBuyerId = buyerId || getStored(STORAGE_KEYS.USER, null)?.id;
+      const res = await fetch('/api/chats/start', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ buyerId: resolvedBuyerId, sellerId, listingId, initialMessage })
+      });
+      const data = await res.json().catch(() => null);
+      if (data && data.success) return data;
+      return { success: false, message: data?.message || 'Could not start chat with seller' };
+    } catch (e) {
+      return { success: false, message: e.message };
+    }
+  },
+
+  async sendMessage(chatId, senderId, text, attachmentUrl) {
+    try {
+      const resolvedSenderId = senderId || getStored(STORAGE_KEYS.USER, null)?.id;
+      const res = await fetch(`/api/chats/${chatId}/send`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ senderId: resolvedSenderId, messageText: text, attachmentUrl })
+      });
+      const data = await res.json().catch(() => null);
+      if (data && data.success) return data;
+      return { success: false, message: data?.message || 'Failed to send message' };
+    } catch (e) {
+      return { success: false, message: e.message };
+    }
+  },
+
+  // 6. NOTIFICATIONS API (Real database table notifications)
+  async getNotifications(userId, type = 'all') {
+    const resolvedUserId = userId || getStored(STORAGE_KEYS.USER, null)?.id;
+    if (!resolvedUserId) return [];
+    try {
+      const res = await fetch(`/api/notifications?userId=${resolvedUserId}&type=${type}`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && Array.isArray(data.notifications)) return data.notifications;
+      }
+    } catch (e) {
+      console.error('Failed to fetch notifications from database:', e);
+    }
+    return [];
+  },
+
+  async markNotificationRead(id) {
+    try {
+      const res = await fetch(`/api/notifications/${id}/read`, { method: 'PATCH' });
+      return await res.json().catch(() => ({ success: true }));
+    } catch (e) {
+      return { success: false, message: e.message };
+    }
+  },
+
+  async markAllNotificationsRead(userId) {
+    try {
+      const resolvedUserId = userId || getStored(STORAGE_KEYS.USER, null)?.id;
+      const res = await fetch('/api/notifications/read-all', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: resolvedUserId })
+      });
+      return await res.json().catch(() => ({ success: true }));
+    } catch (e) {
+      return { success: false, message: e.message };
+    }
+  },
+
+  // 7. AUTH & USER PROFILE (Real database users table)
   async sendOtp(phone) {
+    const cleanPhone = String(phone || '').replace(/\D/g, '').slice(-10);
+    if (!cleanPhone || cleanPhone.length < 10) {
+      return { success: false, message: 'Please enter a valid 10-digit mobile number' };
+    }
     try {
       const res = await fetch('/api/auth/send-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone })
+        body: JSON.stringify({ phone: cleanPhone })
       });
-      if (res.ok) return res.json();
-    } catch {}
-    return { success: true, demoOtp: '123456', message: `OTP sent to +91 ${phone}` };
+      const data = await res.json().catch(() => null);
+      if (data) return data;
+    } catch (e) {
+      console.warn('Backend send-otp failed:', e);
+    }
+    return { success: true, demoOtp: '123456', message: `OTP sent to +91 ${cleanPhone} (Demo: 123456)` };
   },
 
   async verifyOtp(phone, otp) {
+    const cleanPhone = String(phone || '').replace(/\D/g, '').slice(-10);
+    const cleanOtp = String(otp || '').trim();
+
+    if (!cleanPhone) return { success: false, message: 'Mobile number is required' };
+    if (!cleanOtp) return { success: false, message: 'OTP is required' };
+
     try {
       const res = await fetch('/api/auth/verify-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone, otp })
+        body: JSON.stringify({ phone: cleanPhone, otp: cleanOtp })
       });
-      if (res.ok) {
-        const data = await res.json();
-        if (data.user) setStored(STORAGE_KEYS.USER, data.user);
+      const data = await res.json().catch(() => null);
+      if (data) {
+        if (data.success && data.user) {
+          setStored(STORAGE_KEYS.USER, data.user);
+        }
         return data;
       }
-      if (res.status === 403) {
-        const data = await res.json().catch(() => null);
-        return { success: false, message: data?.message || 'Your account is blocked. Contact administrator.' };
-      }
-    } catch {}
-
-    if (otp === '123456' || otp === '000000') {
-      const user = { ...INITIAL_USER, phone: phone || '9876543210' };
-      setStored(STORAGE_KEYS.USER, user);
-      return { success: true, user, isNewUser: false };
+    } catch (e) {
+      console.warn('Backend verify-otp failed:', e);
     }
-    return { success: false, message: 'Invalid OTP code. Please enter 123456.' };
+    return { success: false, message: 'Invalid OTP code. Please enter demo OTP 123456.' };
   },
 
   async checkUserStatus(userId) {
     if (!userId) return { success: false, isBlocked: false };
     try {
       const res = await fetch(`/api/auth/status/${userId}`);
-      if (res.ok) {
-        return res.json();
-      }
+      if (res.ok) return await res.json();
       if (res.status === 403) {
         const data = await res.json().catch(() => null);
-        return { success: false, isBlocked: true, message: data?.message || 'Your account is blocked by administrator.' };
+        return { success: false, isBlocked: true, message: data?.message || 'Your account is blocked.' };
       }
     } catch {}
     return { success: false, isBlocked: false };
@@ -289,87 +448,62 @@ export const ApiService = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       });
-      if (res.ok) {
-        const json = await res.json();
+      const json = await res.json().catch(() => null);
+      if (json && json.success) {
         if (json.user) setStored(STORAGE_KEYS.USER, json.user);
         return json;
       }
-    } catch {}
-
-    const currentUser = getStored(STORAGE_KEYS.USER, INITIAL_USER);
-    const updated = { ...currentUser, ...data };
+      if (json && !json.success) {
+        return json;
+      }
+    } catch (e) {
+      console.warn('Backend completeProfile failed:', e);
+    }
+    const currentUser = getStored(STORAGE_KEYS.USER, null);
+    const updated = { ...(currentUser || {}), ...data, isVerified: true };
     setStored(STORAGE_KEYS.USER, updated);
-    return { success: true, user: updated };
+    return { success: true, user: updated, message: 'Profile saved successfully' };
+  },
+
+  async uploadImage(file) {
+    if (!file) return { success: false, message: 'No file provided' };
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+      formData.append('avatar', file);
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await res.json().catch(() => null);
+      if (data && data.success && data.url) {
+        return { success: true, url: data.url };
+      }
+      if (data && data.message) {
+        return { success: false, message: data.message };
+      }
+    } catch (e) {
+      console.warn('Backend image upload failed:', e);
+    }
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve({ success: true, url: reader.result });
+      reader.onerror = () => resolve({ success: false, message: 'Failed to read image' });
+      reader.readAsDataURL(file);
+    });
   },
 
   getCurrentUser() {
-    return getStored(STORAGE_KEYS.USER, INITIAL_USER);
+    return getStored(STORAGE_KEYS.USER, null);
   },
 
   logout() {
     setStored(STORAGE_KEYS.USER, null);
-    return { success: true };
-  },
-
-  // Saved / Favorites API
-  getSavedCarIds() {
-    return getStored(STORAGE_KEYS.SAVED, ['2']);
-  },
-
-  toggleFavorite(carId) {
-    const list = getStored(STORAGE_KEYS.SAVED, ['2']);
-    const exists = list.includes(String(carId));
-    let updated;
-    if (exists) {
-      updated = list.filter(id => id !== String(carId));
-    } else {
-      updated = [...list, String(carId)];
-    }
-    setStored(STORAGE_KEYS.SAVED, updated);
-    return { success: true, isFavorited: !exists, savedCount: updated.length };
-  },
-
-  // Chat API
-  getConversations() {
-    return getStored(STORAGE_KEYS.CONVERSATIONS, INITIAL_CONVERSATIONS);
-  },
-
-  sendMessage(conversationId, text) {
-    const convs = getStored(STORAGE_KEYS.CONVERSATIONS, INITIAL_CONVERSATIONS);
-    const target = convs.find(c => c.id === conversationId) || convs[0];
-    const newMsg = {
-      id: 'm_' + Date.now(),
-      senderId: 'buyer',
-      senderName: 'You',
-      text,
-      time: 'Just now',
-      isMe: true
-    };
-    target.messages.push(newMsg);
-    target.lastMessage = text;
-    target.lastMessageTime = 'Just now';
-
-    setStored(STORAGE_KEYS.CONVERSATIONS, convs);
-    return { success: true, message: newMsg, conversation: target };
-  },
-
-  // Notifications API
-  getNotifications() {
-    return getStored(STORAGE_KEYS.NOTIFICATIONS, INITIAL_NOTIFICATIONS);
-  },
-
-  markNotificationRead(id) {
-    const notifs = getStored(STORAGE_KEYS.NOTIFICATIONS, INITIAL_NOTIFICATIONS);
-    const item = notifs.find(n => n.id === id);
-    if (item) item.read = true;
-    setStored(STORAGE_KEYS.NOTIFICATIONS, notifs);
-    return { success: true };
-  },
-
-  markAllNotificationsRead() {
-    const notifs = getStored(STORAGE_KEYS.NOTIFICATIONS, INITIAL_NOTIFICATIONS);
-    notifs.forEach(n => (n.read = true));
-    setStored(STORAGE_KEYS.NOTIFICATIONS, notifs);
+    setStored(STORAGE_KEYS.SAVED, []);
+    try {
+      localStorage.removeItem(STORAGE_KEYS.USER);
+      localStorage.removeItem(STORAGE_KEYS.SAVED);
+    } catch {}
     return { success: true };
   }
 };

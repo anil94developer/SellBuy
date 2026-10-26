@@ -14,7 +14,6 @@ export function CarDetailModal({
   onOpenMyListings
 }) {
   const [activeImageIndex, setActiveImageIndex] = useState(0);
-  const [loanYears, setLoanYears] = useState(5);
 
   if (!car) return null;
 
@@ -23,7 +22,6 @@ export function CarDetailModal({
     : [car.primary_image || car.imageUrl || 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=800&q=80'];
 
   const currentImage = images[activeImageIndex] || images[0];
-  const emiCalc = CarModel.calculateEmi(Number(car.price) * 0.8, 9.5, loanYears);
 
   const handlePrev = (e) => {
     e.stopPropagation();
@@ -136,11 +134,11 @@ export function CarDetailModal({
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 4 }}>
                 <span style={{ fontSize: 13, color: '#64748b' }}>
                   <i className="fa-solid fa-location-dot" style={{ color: 'var(--primary)', marginRight: 4 }}></i>
-                  {car.reg_city || car.location}
+                  {car.reg_city || car.location || 'India'}
                 </span>
                 <span style={{ color: '#cbd5e1' }}>•</span>
                 <span style={{ fontSize: 13, color: '#64748b' }}>
-                  Posted 2 days ago
+                  Posted {CarModel.formatTimeAgo(car.created_at || car.createdAt)}
                 </span>
               </div>
             </div>
@@ -151,11 +149,11 @@ export function CarDetailModal({
                 <span className="car-price-label">Our Best Price</span>
                 <div className="car-price-amount">{CarModel.formatPrice(car.price)}</div>
               </div>
-              <div className="car-emi-estimate-chip">
-                <i className="fa-solid fa-calculator"></i>
+              <div className="car-emi-estimate-chip" style={{ background: '#ecfdf5', borderColor: '#a7f3d0' }}>
+                <i className="fa-solid fa-handshake" style={{ color: '#059669' }}></i>
                 <div>
-                  <div style={{ fontSize: 10, textTransform: 'uppercase', opacity: 0.8 }}>Estimated EMI</div>
-                  <div style={{ fontWeight: 800 }}>₹{emiCalc.monthlyEmi.toLocaleString('en-IN')}/mo</div>
+                  <div style={{ fontSize: 10, textTransform: 'uppercase', color: '#047857', fontWeight: 800 }}>Direct Deal</div>
+                  <div style={{ fontWeight: 800, color: '#065f46' }}>0% Commission</div>
                 </div>
               </div>
             </div>
@@ -286,25 +284,13 @@ export function CarDetailModal({
                     </button>
                   </div>
 
-                  {/* In-Modal EMI Slider Tool */}
-                  <div className="in-modal-emi-box">
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-                      <span style={{ fontSize: 12, fontWeight: 700, color: '#334155' }}>
-                        <i className="fa-solid fa-coins" style={{ color: '#eab308', marginRight: 4 }}></i>
-                        Loan Tenure: {loanYears} Years (80% Finance @ 9.5%)
-                      </span>
-                      <span style={{ fontSize: 13, fontWeight: 800, color: 'var(--primary)' }}>
-                        ₹{emiCalc.monthlyEmi.toLocaleString('en-IN')}/mo
-                      </span>
+                  {/* Direct Deal Buyer Assurance */}
+                  <div className="in-modal-emi-box" style={{ background: '#f8fafc', borderColor: '#e2e8f0', display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <i className="fa-solid fa-certificate" style={{ fontSize: 24, color: '#16a34a' }}></i>
+                    <div>
+                      <div style={{ fontSize: 13, fontWeight: 800, color: '#0f172a' }}>100% Direct Seller Listing</div>
+                      <div style={{ fontSize: 12, color: '#64748b' }}>Zero broker fees • Direct contact with vehicle owner • Free RC transfer assistance</div>
                     </div>
-                    <input
-                      type="range"
-                      min="1"
-                      max="7"
-                      value={loanYears}
-                      onChange={(e) => setLoanYears(Number(e.target.value))}
-                      className="emi-tenure-slider"
-                    />
                   </div>
 
                   {/* Action Contact Buttons (Buyer Mode) */}
@@ -328,7 +314,7 @@ export function CarDetailModal({
                     </a>
 
                     <a
-                      href={`https://wa.me/919876543210?text=Hi, I am interested in your ${encodeURIComponent(car.title)} listed on SellBuy.`}
+                      href={`https://wa.me/91${(car.seller_phone || '9876543210').replace(/[^0-9]/g, '').slice(-10)}?text=Hi, I am interested in your ${encodeURIComponent(car.title)} listed on SellBuy.`}
                       target="_blank"
                       rel="noreferrer"
                       className="btn-whatsapp-seller"

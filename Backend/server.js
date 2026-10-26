@@ -10,6 +10,9 @@ const { getPool } = require('./db/connection');
 const { seedDatabase } = require('./db/seed');
 
 const app = express();
+const http = require('http');
+const server = http.createServer(app);
+const socketService = require('./services/socketService');
 const PORT = process.env.PORT || 5000;
 
 // Enable CORS for standalone ports (e.g. 3000, 4000, 8000, file://)
@@ -46,19 +49,27 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
     const ext = path.extname(file.originalname) || '.jpg';
-    cb(null, 'car-' + uniqueSuffix + ext);
+    const prefix = (file.fieldname === 'avatar' || req.query.type === 'avatar') ? 'avatar-' : 'upload-';
+    cb(null, prefix + uniqueSuffix + ext);
   }
 });
-const upload = multer({ storage, limits: { fileSize: 10 * 1024 * 1024 } });
+const upload = multer({ storage, limits: { fileSize: 15 * 1024 * 1024 } });
 
-// Upload Endpoint
-app.post('/api/upload', upload.single('image'), (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ success: false, message: 'No image file uploaded' });
-  }
-  const fileUrl = `/uploads/${req.file.filename}`;
-  logger.car('IMAGE_UPLOAD', `Uploaded image: ${fileUrl}`);
-  res.json({ success: true, url: fileUrl });
+// Upload Endpoint (supports single, field names 'image', 'avatar', 'file', etc.)
+app.post('/api/upload', (req, res) => {
+  upload.any()(req, res, (err) => {
+    if (err) {
+      logger.error('UPLOAD', 'MULTER_ERROR', err.message);
+      return res.status(400).json({ success: false, message: err.message });
+    }
+    const uploadedFile = req.file || (req.files && req.files[0]);
+    if (!uploadedFile) {
+      return res.status(400).json({ success: false, message: 'No image file uploaded' });
+    }
+    const fileUrl = `/uploads/${uploadedFile.filename}`;
+    logger.car('IMAGE_UPLOAD', `Uploaded image: ${fileUrl}`);
+    res.json({ success: true, url: fileUrl, filename: uploadedFile.filename });
+  });
 });
 
 // Request Logging Middleware
@@ -291,10 +302,14 @@ async function startServer() {
     console.error('[STARTUP WARNING] DB initial connection warning:', err.message);
   }
 
-  app.listen(PORT, () => {
+  // Initialize Real-time WebSocket Socket Server
+  socketService.init(server);
+
+  server.listen(PORT, () => {
     logger.info('SYSTEM', 'SERVER_START', `SellBuy Server running on http://localhost:${PORT}`);
     console.log(`=======================================================`);
     console.log(`🚗 SellBuy Hub running on: http://localhost:${PORT}`);
+    console.log(`💬 Real-Time Chat Socket: ws://localhost:${PORT}/ws/chat`);
     console.log(`📱 1. Application: http://localhost:${PORT}/app`);
     console.log(`🌐 2. Website:     http://localhost:${PORT}/web`);
     console.log(`🛡️ 3. Admin:       http://localhost:${PORT}/admin`);

@@ -95,6 +95,10 @@ router.post('/verify-otp', async (req, res) => {
 // Profile Save & Update Handler (Registration & Edit Profile)
 const handleProfileSave = async (req, res) => {
   try {
+    try {
+      await query('ALTER TABLE users MODIFY COLUMN avatar TEXT NULL');
+    } catch (_) {}
+
     const { phone, name, email, avatar } = req.body;
     const targetId = req.body.id || req.body.userId || req.headers['x-user-id'];
 

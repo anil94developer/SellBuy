@@ -8,6 +8,8 @@ export function MarketplaceLayout({
   selectedBrand,
   onSelectBrand,
   selectedCity,
+  onSelectCity,
+  cities = [],
   onOpenCityModal,
   minPrice,
   setMinPrice,
@@ -101,16 +103,76 @@ export function MarketplaceLayout({
 
             <div className="olx-sidebar-scroll-body">
               {/* 1. Location Block */}
+              {/* 1. Location Block */}
               <div className="olx-sidebar-block">
-                <span className="olx-block-title">LOCATION</span>
-                <div className="olx-loc-sidebar-card" onClick={onOpenCityModal}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <i className="fa-solid fa-location-dot" style={{ color: 'var(--primary)' }}></i>
-                    <span style={{ fontSize: 13, fontWeight: 700, color: '#0f172a' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+                  <span className="olx-block-title" style={{ margin: 0 }}>LOCATION</span>
+                  {selectedCity && selectedCity !== 'All Cities' && onSelectCity && (
+                    <button
+                      type="button"
+                      className="olx-clear-location-link"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onSelectCity('All Cities');
+                      }}
+                      title="Show cars from all cities"
+                    >
+                      Clear
+                    </button>
+                  )}
+                </div>
+
+                <div
+                  className="olx-loc-sidebar-card"
+                  onClick={() => {
+                    setMobileFilterOpen(false);
+                    if (onOpenCityModal) onOpenCityModal();
+                  }}
+                  role="button"
+                  tabIndex={0}
+                  title="Click to select another city"
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, overflow: 'hidden' }}>
+                    <i className="fa-solid fa-location-dot" style={{ color: 'var(--primary)', flexShrink: 0 }}></i>
+                    <span style={{ fontSize: 13, fontWeight: 700, color: '#0f172a', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
                       {selectedCity || 'Jaipur, Rajasthan'}
                     </span>
                   </div>
-                  <span style={{ fontSize: 12, color: 'var(--primary)', fontWeight: 700 }}>Change</span>
+                  <button
+                    type="button"
+                    className="olx-change-loc-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setMobileFilterOpen(false);
+                      if (onOpenCityModal) onOpenCityModal();
+                    }}
+                  >
+                    Change
+                  </button>
+                </div>
+
+                {/* Quick Popular Cities Pills in Sidebar */}
+                <div className="olx-quick-budget-pills" style={{ marginTop: 8 }}>
+                  {['All Cities', 'Jaipur', 'Delhi NCR', 'Mumbai', 'Bangalore'].map((cityName) => {
+                    const isCurrent =
+                      (cityName === 'All Cities' && (selectedCity === 'All Cities' || !selectedCity)) ||
+                      (cityName !== 'All Cities' && selectedCity && (
+                        selectedCity === cityName ||
+                        selectedCity.toLowerCase().startsWith(cityName.toLowerCase().split(' ')[0])
+                      ));
+                    return (
+                      <button
+                        key={cityName}
+                        type="button"
+                        className={`olx-budget-tag ${isCurrent ? 'active' : ''}`}
+                        onClick={() => {
+                          if (onSelectCity) onSelectCity(cityName === 'All Cities' ? 'All Cities' : cityName);
+                        }}
+                      >
+                        {cityName}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -460,10 +522,10 @@ export function MarketplaceLayout({
                         <div className="olx-card-footer">
                           <span className="olx-card-location">
                             <i className="fa-solid fa-location-dot" style={{ marginRight: 4, color: '#94a3b8' }}></i>
-                            {car.reg_city?.split(',')[0] || car.location?.split(',')[0] || 'Jaipur'}
+                            {car.reg_city?.split(',')[0] || car.location?.split(',')[0] || 'India'}
                           </span>
                           <span className="olx-card-time">
-                            2 DAYS AGO
+                            {CarModel.formatCardTime(car.created_at || car.createdAt)}
                           </span>
                         </div>
 

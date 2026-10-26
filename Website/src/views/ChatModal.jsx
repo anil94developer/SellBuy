@@ -27,7 +27,10 @@ export function ChatModal({
   onSendMessage,
   onSelectCar,
   currentUser,
-  userListings = []
+  userListings = [],
+  onTyping,
+  isSocketConnected = false,
+  typingStatus = {}
 }) {
   const [inputText, setInputText] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
@@ -39,6 +42,7 @@ export function ChatModal({
   const [mobileShowChat, setMobileShowChat] = useState(false); // for responsive mobile view
 
   const messagesEndRef = useRef(null);
+  const typingTimerRef = useRef(null);
 
   // Helper to determine if current user is seller in this conversation
   const isSellingConv = (conv) => {
@@ -62,6 +66,11 @@ export function ChatModal({
   const isCurrentSelling = isSellingConv(current);
   const activeSuggestions = isCurrentSelling ? SELLER_SUGGESTIONS : BUYER_SUGGESTIONS;
 
+  // Real-time socket typing state
+  const currentChatTyping = current ? typingStatus[String(current.id)] : null;
+  const isPeerTyping = Boolean(currentChatTyping?.isTyping && String(currentChatTyping?.senderId) !== String(currentUser?.id)) || isSellerTyping;
+  const typingSenderName = currentChatTyping?.senderName || (isCurrentSelling ? (current?.buyerName || 'Buyer') : (current?.sellerName || 'Seller'));
+
   // Filter conversations
   const filteredConversations = conversations.filter(c => {
     const matchesSearch =
@@ -83,20 +92,38 @@ export function ChatModal({
     return matchesSearch;
   });
 
+  const handleInputChange = (e) => {
+    const val = e.target.value;
+    setInputText(val);
+
+    if (onTyping && current) {
+      onTyping(true);
+      if (typingTimerRef.current) clearTimeout(typingTimerRef.current);
+      typingTimerRef.current = setTimeout(() => {
+        onTyping(false);
+      }, 1500);
+    }
+  };
+
   const handleSend = (e) => {
     if (e) e.preventDefault();
     if (!inputText.trim()) return;
+
+    if (typingTimerRef.current) clearTimeout(typingTimerRef.current);
+    if (onTyping) onTyping(false);
 
     const textToSend = inputText.trim();
     setInputText('');
     setShowAttachMenu(false);
     onSendMessage(textToSend);
 
-    // Simulate seller typing indicator for realistic UX
-    setIsSellerTyping(true);
-    setTimeout(() => {
-      setIsSellerTyping(false);
-    }, 1200);
+    // Simulate seller typing indicator for realistic UX if not connected
+    if (!isSocketConnected) {
+      setIsSellerTyping(true);
+      setTimeout(() => {
+        setIsSellerTyping(false);
+      }, 1200);
+    }
   };
 
   const handleQuickReply = (text) => {
@@ -232,6 +259,8 @@ export function ChatModal({
               filteredConversations.map((c) => {
                 const isActive = current && current.id === c.id;
                 const isSelling = isSellingConv(c);
+                const threadPartnerName = isSelling ? (c.buyerName || 'Buyer') : (c.sellerName || 'Verified Seller');
+                const threadPartnerAvatar = isSelling ? (c.buyerAvatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80') : (c.sellerAvatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80');
 
                 return (
                   <div
@@ -246,8 +275,8 @@ export function ChatModal({
                     {/* Avatar with Online Green Dot */}
                     <div className="chat-thread-avatar-wrap">
                       <img
-                        src={c.sellerAvatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80'}
-                        alt={c.sellerName}
+                        src={threadPartnerAvatar}
+                        alt={threadPartnerName}
                         className="chat-thread-avatar"
                       />
                       {c.isOnline && <span className="chat-online-pulse"></span>}
@@ -256,7 +285,7 @@ export function ChatModal({
                     {/* Thread Info */}
                     <div className="chat-thread-info">
                       <div className="chat-thread-top-line">
-                        <span className="chat-thread-name">{c.sellerName}</span>
+                        <span className="chat-thread-name">{threadPartnerName}</span>
                         <span className="chat-thread-time">{c.lastMessageTime || 'Just now'}</span>
                       </div>
 
@@ -319,8 +348,8 @@ export function ChatModal({
 
                   <div className="chat-header-avatar-wrap">
                     <img
-                      src={current.sellerAvatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80'}
-                      alt={current.sellerName}
+                      src={isCurrentSelling ? (current.buyerAvatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80') : (current.sellerAvatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80')}
+                      alt={isCurrentSelling ? (current.buyerName || 'Buyer') : (current.sellerName || 'Seller')}
                       className="chat-header-avatar"
                     />
                     {current.isOnline && <span className="chat-online-dot"></span>}
@@ -328,17 +357,18 @@ export function ChatModal({
 
                   <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <h4 className="chat-header-name">{current.sellerName}</h4>
+                      <h4 className="chat-header-name">{isCurrentSelling ? (current.buyerName || 'Buyer') : (current.sellerName || 'Verified Seller')}</h4>
                       <span className="chat-seller-badge">
-                        <i className="fa-solid fa-circle-check"></i> {current.verifiedBadge || 'Verified Seller'}
+                        <i className="fa-solid fa-circle-check"></i> {isCurrentSelling ? 'Verified Buyer' : (current.verifiedBadge || 'Verified Seller')}
                       </span>
                     </div>
                     <div className="chat-header-sub">
                       <span className="chat-status-active">
-                        <span className="status-dot"></span> Active Now
+                        <span className="status-dot" style={{ background: isSocketConnected ? '#10b981' : '#f59e0b' }}></span>
+                        {isSocketConnected ? 'Real-Time Socket Connected' : 'Syncing...'}
                       </span>
                       <span>•</span>
-                      <span>{current.location || 'Jaipur'}</span>
+                      <span>{current.carLocation || current.location || 'Jaipur'}</span>
                       {current.rating && (
                         <>
                           <span>•</span>
@@ -352,7 +382,7 @@ export function ChatModal({
                 {/* Header Action Buttons (WhatsApp, Phone Call & Close) */}
                 <div className="chat-header-actions">
                   <a
-                    href={`https://wa.me/91${(current.sellerPhone || '9876543210').replace(/[^0-9]/g, '').slice(-10)}?text=Hi%20${encodeURIComponent(current.sellerName)},%20I%20am%20interested%20in%20your%20${encodeURIComponent(current.carTitle)}%20on%20SellBuy.`}
+                    href={`https://wa.me/91${((isCurrentSelling ? current.buyerPhone : current.sellerPhone) || '9876543210').replace(/[^0-9]/g, '').slice(-10)}?text=Hi%20${encodeURIComponent(isCurrentSelling ? (current.buyerName || 'there') : (current.sellerName || 'there'))},%20regarding%20${encodeURIComponent(current.carTitle)}%20on%20SellBuy.`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="chat-whatsapp-btn"
@@ -551,11 +581,11 @@ export function ChatModal({
                   );
                 })}
 
-                {/* Animated Seller Typing Indicator */}
-                {isSellerTyping && (
+                {/* Real-time typing bubble */}
+                {isPeerTyping && (
                   <div className="chat-bubble-row seller">
                     <img
-                      src={current.sellerAvatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80'}
+                      src={isCurrentSelling ? (current.buyerAvatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80') : (current.sellerAvatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80')}
                       alt=""
                       className="chat-bubble-avatar"
                     />
@@ -566,7 +596,7 @@ export function ChatModal({
                         <span></span>
                       </div>
                       <span style={{ fontSize: 11, color: '#64748b', marginLeft: 6 }}>
-                        {current.sellerName?.split(' ')[0]} is typing...
+                        {typingSenderName?.split(' ')[0]} is typing...
                       </span>
                     </div>
                   </div>
@@ -631,10 +661,10 @@ export function ChatModal({
 
                 <input
                   type="text"
-                  placeholder={`Type a message to ${current.sellerName?.split(' ')[0]}...`}
+                  placeholder={`Type a message to ${isCurrentSelling ? (current.buyerName?.split(' ')[0] || 'Buyer') : (current.sellerName?.split(' ')[0] || 'Seller')}...`}
                   className="chat-text-input"
                   value={inputText}
-                  onChange={(e) => setInputText(e.target.value)}
+                  onChange={handleInputChange}
                   autoFocus
                 />
 

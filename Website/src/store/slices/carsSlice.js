@@ -29,6 +29,9 @@ const initialState = {
     hasPrevPage: false
   },
   savedCarIds: initialSaved,
+  savedCars: [],
+  userListings: [],
+  userListingsCounts: { active: 0, pending: 0, sold: 0 },
   selectedCar: null,
   galleryCar: null,
   editListingCar: null,
@@ -68,6 +71,7 @@ export const carsSlice = createSlice({
     // Filter mutations
     setFilter: (state, action) => {
       state.filters = { ...state.filters, ...action.payload };
+      state.pagination.page = 1;
     },
     resetFilters: (state) => {
       state.filters = {
@@ -89,6 +93,17 @@ export const carsSlice = createSlice({
     toggleFavoriteRequest: () => {},
     setSavedCarIds: (state, action) => {
       state.savedCarIds = action.payload;
+    },
+
+    // User Listings & Saved Cars from DB
+    setUserListings: (state, action) => {
+      state.userListings = action.payload;
+    },
+    setUserListingsCounts: (state, action) => {
+      state.userListingsCounts = action.payload;
+    },
+    setSavedCars: (state, action) => {
+      state.savedCars = action.payload;
     },
 
     // Car mutations
@@ -127,7 +142,10 @@ export const {
   setGalleryCar,
   setEditListingCar,
   setMyListingsTab,
-  setCarsPage
+  setCarsPage,
+  setUserListings,
+  setUserListingsCounts,
+  setSavedCars
 } = carsSlice.actions;
 
 export default carsSlice.reducer;

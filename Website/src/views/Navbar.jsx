@@ -39,11 +39,12 @@ export function Navbar({
       <div className="olx-main-nav">
         <div className="olx-nav-container">
           {/* 1. Hamburger Drawer Toggle & Logo */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div className="olx-nav-brand-group">
             <button
               className="olx-drawer-toggle-btn"
               onClick={onOpenDrawer}
               title="Open Navigation Menu"
+              aria-label="Open Navigation Menu"
             >
               <i className="fa-solid fa-bars"></i>
             </button>
@@ -63,8 +64,8 @@ export function Navbar({
             </div>
           </div>
 
-          {/* 2. City / Location Selector Box (OLX style) */}
-          <div className="olx-location-box" onClick={onOpenCityModal} title="Choose Location">
+          {/* 2. City / Location Selector Box (Desktop) */}
+          <div className="olx-location-box hide-on-mobile" onClick={onOpenCityModal} title="Choose Location">
             <i className="fa-solid fa-location-dot olx-loc-icon"></i>
             <span className="olx-loc-text">
               {selectedCity?.split(',')[0] || 'Jaipur, Rajasthan'}
@@ -72,12 +73,12 @@ export function Navbar({
             <i className="fa-solid fa-chevron-down olx-loc-arrow"></i>
           </div>
 
-          {/* 3. Wide Center Search Bar (OLX style) */}
+          {/* 3. Wide Center Search Bar (OLX style, full width on mobile) */}
           <form className="olx-search-box" onSubmit={handleSearchSubmit}>
             <input
               type="text"
               className="olx-search-input"
-              placeholder="Find Cars by Make, Model, or Keyword (e.g. Creta, Swift, Automatic)..."
+              placeholder="Find Cars by Make, Model, or Keyword..."
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
             />
@@ -98,16 +99,26 @@ export function Navbar({
             </button>
           </form>
 
-          {/* 4. Right Controls: Language, Wishlist, Chat, Notifications, User & Iconic +SELL */}
+          {/* 4. Right Controls: Location, Language, Wishlist, Chat, Notifications, User & Iconic +SELL */}
           <div className="olx-right-controls">
+            {/* Mobile Location Quick Button */}
+            <button
+              className="olx-mobile-loc-btn hide-on-desktop"
+              onClick={onOpenCityModal}
+              title="Choose City"
+            >
+              <i className="fa-solid fa-location-dot" style={{ color: 'var(--primary)' }}></i>
+              <span>{selectedCity?.split(',')[0] || 'Jaipur'}</span>
+            </button>
+
             {/* Language Switcher */}
             <button className="olx-lang-btn" onClick={toggleLang} title="Switch Language">
               <span>{lang === 'en' ? 'हिन्दी' : 'ENG'}</span>
             </button>
 
-            {/* Saved Cars (♥) */}
+            {/* Saved Cars (♥) - Desktop */}
             <button
-              className="olx-nav-icon-btn"
+              className="olx-nav-icon-btn hide-on-mobile"
               onClick={onOpenSavedCars}
               title="Saved Cars"
             >
@@ -115,9 +126,9 @@ export function Navbar({
               {savedCount > 0 && <span className="olx-badge-count">{savedCount}</span>}
             </button>
 
-            {/* Chats (💬) */}
+            {/* Chats (💬) - Desktop */}
             <button
-              className="olx-nav-icon-btn"
+              className="olx-nav-icon-btn hide-on-mobile"
               onClick={onOpenChat}
               title="Chats & Messages"
             >
@@ -125,9 +136,9 @@ export function Navbar({
               {unreadChatsCount > 0 && <span className="olx-badge-count blue">{unreadChatsCount}</span>}
             </button>
 
-            {/* Notifications (🔔) */}
+            {/* Notifications (🔔) - Desktop */}
             <button
-              className="olx-nav-icon-btn"
+              className="olx-nav-icon-btn hide-on-mobile"
               onClick={onOpenNotifications}
               title="Notifications"
             >
@@ -137,15 +148,15 @@ export function Navbar({
               )}
             </button>
 
-            {/* View Mode Toggle: Android Simulator vs Web */}
+            {/* View Mode Toggle: Android Simulator vs Web - Desktop */}
             <button
-              className={`olx-sim-mode-btn ${viewMode === 'mobile' ? 'active' : ''}`}
+              className={`olx-sim-mode-btn hide-on-mobile ${viewMode === 'mobile' ? 'active' : ''}`}
               onClick={toggleViewMode}
               title={viewMode === 'desktop' ? 'Switch to Android Mobile View' : 'Switch to Desktop Web View'}
             >
               <i className={viewMode === 'desktop' ? 'fa-solid fa-mobile-screen-button' : 'fa-solid fa-desktop'}></i>
               <span className="hide-on-tablet">
-                {viewMode === 'desktop' ? 'Mobile App' : 'Web Portal'}
+                {viewMode === 'desktop' ? 'App' : 'Web'}
               </span>
             </button>
 
@@ -210,9 +221,13 @@ export function Navbar({
               Pre-Owned Deals
             </button>
 
-            <a href="#emi-calculator" className="olx-quick-pill">
-              <i className="fa-solid fa-calculator" style={{ color: 'var(--primary)' }}></i> EMI Calculator
-            </a>
+            <button
+              className="olx-quick-pill"
+              onClick={onOpenSellWizard}
+              style={{ background: '#f0fdf4', borderColor: '#bbf7d0', color: '#16a34a' }}
+            >
+              <i className="fa-solid fa-camera"></i> Sell Your Car
+            </button>
           </div>
         </div>
       </div>

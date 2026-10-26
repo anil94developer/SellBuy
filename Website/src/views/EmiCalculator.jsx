@@ -15,7 +15,7 @@ export function EmiCalculator({ t }) {
 
   return (
     <section className="web-container" id="emi-calculator" style={{ marginBottom: 60 }}>
-      <div style={{ background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)', color: '#ffffff', borderRadius: 20, padding: 40, display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 30, alignItems: 'center' }}>
+      <div className="emi-calculator-card" style={{ background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)', color: '#ffffff', borderRadius: 20, alignItems: 'center' }}>
         <div>
           <span style={{ color: '#60a5fa', fontWeight: 700, fontSize: 12, textTransform: 'uppercase' }}>Smart Finance</span>
           <h3 style={{ fontSize: 26, fontWeight: 800, margin: '8px 0 16px 0' }}>{t('emiTitle')}</h3>
@@ -23,7 +23,7 @@ export function EmiCalculator({ t }) {
             Lowest interest rates starting from 8.75% with zero pre-closure charges from partner banks.
           </p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
+          <div className="emi-inputs-grid">
             <div>
               <label style={{ fontSize: 11, color: '#94a3b8', display: 'block', marginBottom: 4 }}>LOAN AMOUNT (₹)</label>
               <input

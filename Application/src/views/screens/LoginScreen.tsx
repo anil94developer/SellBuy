@@ -118,37 +118,7 @@ export const LoginScreen: React.FC<Props> = ({
             </View>
           </View>
 
-          {/* Social Divider */}
-          <View style={styles.dividerRow}>
-            <View style={styles.dividerLine} />
-            <Text style={styles.dividerText}>Or continue with</Text>
-            <View style={styles.dividerLine} />
-          </View>
 
-          {/* Social Buttons */}
-          <View style={styles.socialRow}>
-            <TouchableOpacity
-              style={styles.socialButton}
-              onPress={() => {
-                if (onSocialLogin) onSocialLogin('google');
-                else onSendOtp('9870003344');
-              }}
-              activeOpacity={0.7}>
-              <Text style={styles.googleIcon}>G</Text>
-              <Text style={styles.socialText}>Google</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.socialButton}
-              onPress={() => {
-                if (onSocialLogin) onSocialLogin('apple');
-                else onSendOtp('9870001122');
-              }}
-              activeOpacity={0.7}>
-              <Text style={styles.appleIcon}></Text>
-              <Text style={styles.socialText}>Apple</Text>
-            </TouchableOpacity>
-          </View>
 
           {/* Footer Terms */}
           <View style={styles.footer}>

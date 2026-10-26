@@ -17,6 +17,7 @@ export function MenuDrawer({
   unreadChatsCount,
   unreadNotificationsCount,
   savedCount,
+  listingsCount = 0,
   toggleLang,
   lang,
   t
@@ -93,6 +94,7 @@ export function MenuDrawer({
               <i className="fa-solid fa-car"></i>
             </div>
             <div className="drawer-item-label">My Listed Vehicles</div>
+            {listingsCount > 0 && <span className="drawer-count-badge" style={{ background: '#16a34a', color: '#fff', fontSize: 11, fontWeight: 800, padding: '2px 8px', borderRadius: 10 }}>{listingsCount}</span>}
           </button>
 
           {/* BUYER SECTION */}
@@ -138,12 +140,12 @@ export function MenuDrawer({
             <span style={{ fontSize: 13, fontWeight: 700, color: '#0f172a' }}>{lang === 'en' ? 'हिन्दी' : 'English'}</span>
           </button>
 
-          <a href="#emi-calculator" className="drawer-item" onClick={onClose}>
-            <div className="drawer-icon-wrap" style={{ background: '#f8fafc', color: '#475569' }}>
-              <i className="fa-solid fa-calculator"></i>
+          <button className="drawer-item" onClick={() => { onClose(); onOpenSellWizard && onOpenSellWizard(); }}>
+            <div className="drawer-icon-wrap" style={{ background: '#f0fdf4', color: '#16a34a' }}>
+              <i className="fa-solid fa-camera"></i>
             </div>
-            <div className="drawer-item-label">EMI Loan Calculator</div>
-          </a>
+            <div className="drawer-item-label">Sell Your Car (0% Commission)</div>
+          </button>
 
           <a href="tel:+919876543210" className="drawer-item">
             <div className="drawer-icon-wrap" style={{ background: '#f8fafc', color: '#475569' }}>

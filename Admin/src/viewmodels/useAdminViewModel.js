@@ -450,6 +450,7 @@ export function useAdminViewModel() {
     updateCity,
     toggleCityStatus,
     deleteCity,
-    sendBroadcast
+    sendBroadcast,
+    uploadImage: (file) => AdminApiService.uploadImage(file)
   };
 }

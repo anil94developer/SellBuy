@@ -9,7 +9,6 @@ import { BottomNav } from './views/BottomNav';
 import { HeroBanner } from './views/HeroBanner';
 import { MarketplaceLayout } from './views/MarketplaceLayout';
 import { TrustSection } from './views/TrustSection';
-import { EmiCalculator } from './views/EmiCalculator';
 import { Footer } from './views/Footer';
 
 // Modals matching 26 Android Mobile Screens
@@ -54,6 +53,8 @@ export default function App() {
         selectedBrand={vm.selectedBrand}
         onSelectBrand={vm.setSelectedBrand}
         selectedCity={vm.selectedCity}
+        onSelectCity={vm.selectCity}
+        cities={vm.cities}
         onOpenCityModal={() => vm.setIsCityModalOpen(true)}
         minPrice={vm.minPrice}
         setMinPrice={vm.setMinPrice}
@@ -83,8 +84,6 @@ export default function App() {
       />
 
       <TrustSection onOpenSellWizard={vm.startSellWizard} />
-
-      <EmiCalculator t={t} />
 
       <Footer
         onOpenCityModal={() => vm.setIsCityModalOpen(true)}
@@ -196,6 +195,7 @@ export default function App() {
         unreadChatsCount={vm.unreadChatsCount}
         unreadNotificationsCount={vm.unreadNotificationsCount}
         savedCount={vm.savedCarIds.length}
+        listingsCount={vm.userListings.length}
         toggleLang={toggleLang}
         lang={lang}
         t={t}
@@ -234,9 +234,11 @@ export default function App() {
         isOpen={vm.isSellWizardOpen}
         onClose={() => vm.setIsSellWizardOpen(false)}
         brands={vm.brands}
+        cities={vm.cities}
         step={vm.sellStep}
         setStep={vm.setSellStep}
         onSubmit={vm.submitSellCar}
+        onUploadImage={vm.uploadAvatar}
       />
 
       {/* My Listings Modal (Screen 21) */}
@@ -244,6 +246,7 @@ export default function App() {
         isOpen={vm.isMyListingsOpen}
         onClose={() => vm.setIsMyListingsOpen(false)}
         listings={vm.userListings}
+        counts={vm.userListingsCounts}
         activeTab={vm.myListingsTab}
         onTabChange={vm.setMyListingsTab}
         onEditListing={(car) => vm.setEditListingCar(car)}
@@ -283,6 +286,9 @@ export default function App() {
         onSelectCar={vm.openCarDetails}
         currentUser={vm.currentUser}
         userListings={vm.userListings}
+        onTyping={vm.sendTyping}
+        isSocketConnected={vm.isSocketConnected}
+        typingStatus={vm.typingStatus}
       />
 
       {/* Notifications Modal (Screen 25) */}
@@ -313,6 +319,7 @@ export default function App() {
         onOpenNotifications={() => vm.setIsNotificationsOpen(true)}
         onOpenSellWizard={vm.startSellWizard}
         onSaveProfile={vm.saveProfile}
+        onUploadAvatar={vm.uploadAvatar}
         onLogout={vm.logout}
         toggleLang={toggleLang}
         lang={lang}
@@ -353,6 +360,7 @@ export default function App() {
         onRequestOtp={vm.requestOtp}
         onVerifyOtp={vm.verifyOtp}
         onSaveProfile={vm.saveProfile}
+        onUploadAvatar={vm.uploadAvatar}
       />
 
       {/* Feedback Toast Notification Banner */}

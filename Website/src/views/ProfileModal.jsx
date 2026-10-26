@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 const AVATARS = [
   'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
@@ -23,6 +23,7 @@ export function ProfileModal({
   onOpenNotifications,
   onOpenSellWizard,
   onSaveProfile,
+  onUploadAvatar,
   onLogout,
   toggleLang,
   lang
@@ -31,6 +32,9 @@ export function ProfileModal({
   const [name, setName] = useState(currentUser?.name || '');
   const [email, setEmail] = useState(currentUser?.email || '');
   const [avatar, setAvatar] = useState(currentUser?.avatar || AVATARS[0]);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [uploadError, setUploadError] = useState('');
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     if (currentUser) {
@@ -41,6 +45,45 @@ export function ProfileModal({
   }, [currentUser, isOpen]);
 
   if (!isOpen) return null;
+
+  const handleAvatarUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      setUploadError('Please select a valid image file');
+      return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+      setUploadError('Image must be under 10MB');
+      return;
+    }
+
+    setUploadingAvatar(true);
+    setUploadError('');
+
+    try {
+      const preview = URL.createObjectURL(file);
+      setAvatar(preview);
+
+      const uploadFn = onUploadAvatar;
+      if (!uploadFn) throw new Error('Upload handler not available');
+      const res = await uploadFn(file);
+
+      if (res && res.success && res.url) {
+        setAvatar(res.url);
+      } else {
+        setUploadError(res?.message || 'Upload failed');
+      }
+    } catch (err) {
+      console.error('Avatar upload error:', err);
+      setUploadError('Failed to upload image');
+    } finally {
+      setUploadingAvatar(false);
+      if (e.target) e.target.value = '';
+    }
+  };
 
   const handleEditSubmit = (e) => {
     e.preventDefault();
@@ -170,9 +213,54 @@ export function ProfileModal({
           <form onSubmit={handleEditSubmit} className="profile-edit-subform">
             <h4 style={{ fontSize: 14, fontWeight: 800, marginBottom: 10 }}>Update Information</h4>
 
-            <div style={{ marginBottom: 12 }}>
-              <span style={{ fontSize: 11, color: '#64748b' }}>Choose Avatar</span>
-              <div style={{ display: 'flex', gap: 8, marginTop: 4 }}>
+            {/* Hidden file input */}
+            <input
+              type="file"
+              ref={fileInputRef}
+              style={{ display: 'none' }}
+              accept="image/jpeg,image/png,image/webp,image/gif"
+              onChange={handleAvatarUpload}
+            />
+
+            {uploadError && <div className="auth-error-msg" style={{ marginBottom: 10 }}>{uploadError}</div>}
+
+            <div style={{ marginBottom: 16, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <div
+                className="avatar-upload-preview-wrapper"
+                onClick={() => !uploadingAvatar && fileInputRef.current?.click()}
+                title="Click to upload new photo"
+                style={{ width: 80, height: 80, marginBottom: 8 }}
+              >
+                <img
+                  src={avatar || AVATARS[0]}
+                  alt="Avatar preview"
+                  className="avatar-upload-preview-img"
+                  style={{ width: 80, height: 80 }}
+                />
+                {uploadingAvatar ? (
+                  <div className="avatar-upload-spinner-overlay">
+                    <i className="fa-solid fa-spinner fa-spin"></i>
+                  </div>
+                ) : (
+                  <div className="avatar-upload-badge" title="Change photo">
+                    <i className="fa-solid fa-camera"></i>
+                  </div>
+                )}
+              </div>
+
+              <button
+                type="button"
+                className="btn-upload-avatar-trigger"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploadingAvatar}
+                style={{ fontSize: 12, padding: '6px 14px', marginBottom: 10 }}
+              >
+                <i className="fa-solid fa-cloud-arrow-up"></i>
+                <span>{uploadingAvatar ? 'Uploading...' : 'Upload Custom Photo'}</span>
+              </button>
+
+              <span style={{ fontSize: 11, color: '#64748b', marginBottom: 6 }}>Or select from presets:</span>
+              <div style={{ display: 'flex', gap: 8, justifyContent: 'center', flexWrap: 'wrap' }}>
                 {AVATARS.map((av, idx) => (
                   <img
                     key={idx}

@@ -869,41 +869,54 @@ export function InventorySection({ listings, search, setSearch, onApprove, onRej
   );
 }
 
-// 5. Add New Car (Admin Form)
-export function AddCarSection({ brands, cities, onAddCar }) {
+// 5. Add New Car (Admin Form - Fully Manual Process)
+export function AddCarSection({ brands = [], cities = [], onAddCar }) {
   const [title, setTitle] = useState('');
-  const [brandId, setBrandId] = useState(1);
+  const [brandId, setBrandId] = useState(brands && brands.length > 0 ? brands[0].id : 1);
   const [modelName, setModelName] = useState('');
-  const [manufacturingYear, setManufacturingYear] = useState('2022');
-  const [regCity, setRegCity] = useState('Jaipur');
+  const [manufacturingYear, setManufacturingYear] = useState(new Date().getFullYear().toString());
+  const [regCity, setRegCity] = useState(cities && cities.length > 0 ? cities[0].name : 'Jaipur');
   const [price, setPrice] = useState('');
-  const [kmDriven, setKmDriven] = useState('28000');
+  const [kmDriven, setKmDriven] = useState('');
   const [fuelType, setFuelType] = useState('Petrol');
   const [transmission, setTransmission] = useState('Manual');
   const [ownership, setOwnership] = useState('1st Owner');
-  const [images, setImages] = useState(['https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=800&q=80']);
-  const [description, setDescription] = useState('Top condition certified vehicle with complete service history and zero-dep insurance.');
+  const [images, setImages] = useState([]);
+  const [description, setDescription] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!title.trim() || !price) {
-      alert('Please enter vehicle title and asking price.');
+    if (!title.trim()) {
+      alert('Please enter vehicle title.');
       return;
     }
+    if (!price || Number(price) <= 0) {
+      alert('Please enter a valid asking price.');
+      return;
+    }
+    if (!kmDriven || Number(kmDriven) < 0) {
+      alert('Please enter total kilometers driven.');
+      return;
+    }
+    if (!images || images.length === 0) {
+      alert('Please upload at least one vehicle photo.');
+      return;
+    }
+
     onAddCar({
-      title,
-      brandId,
-      modelName: modelName || title.split(' ')[0],
-      manufacturingYear,
-      regYear: manufacturingYear,
-      regCity,
-      price,
-      kmDriven,
+      title: title.trim(),
+      brandId: Number(brandId),
+      modelName: modelName.trim() || title.trim().split(' ')[0],
+      manufacturingYear: manufacturingYear || new Date().getFullYear(),
+      regYear: manufacturingYear || new Date().getFullYear(),
+      regCity: regCity || 'Jaipur',
+      price: Number(price),
+      kmDriven: Number(kmDriven),
       fuelType,
       transmission,
       ownership,
-      description,
-      images: images && images.length > 0 ? images : ['https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=800&q=80']
+      description: description.trim() || `${title.trim()} certified vehicle with full service history.`,
+      images
     });
   };
 
@@ -986,8 +999,10 @@ export function AddCarSection({ brands, cities, onAddCar }) {
               <label className="admin-form-label">KM Driven</label>
               <input
                 type="number"
+                placeholder="e.g. 28000"
                 value={kmDriven}
                 onChange={(e) => setKmDriven(e.target.value)}
+                required
                 className="admin-form-input"
               />
             </div>
@@ -1023,7 +1038,7 @@ export function AddCarSection({ brands, cities, onAddCar }) {
             <div className="admin-form-group" style={{ gridColumn: 'span 2' }}>
               <AdminImagePicker
                 label="Vehicle Photos & Gallery"
-                hint="Upload car exterior, interior, or odometer photos (Drag & drop or browse)"
+                hint="Upload car exterior, interior, or odometer photos (Drag & drop or browse from device)"
                 multiple={true}
                 value={images}
                 onChange={setImages}
@@ -1034,6 +1049,7 @@ export function AddCarSection({ brands, cities, onAddCar }) {
               <label className="admin-form-label">Vehicle Description</label>
               <textarea
                 rows={3}
+                placeholder="Enter complete vehicle description, condition details, service records..."
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 className="admin-form-input"
